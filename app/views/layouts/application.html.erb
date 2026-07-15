@@ -24,8 +24,32 @@
   </head>
 
   <body>
-  <p class="notice"><%= notice %></p>
-       <p class="alert"><%= alert %></p>
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+
+    <% if user_signed_in? %>
+      <nav class="topbar">
+        <div class="topbar-left">
+          <h1>ManageBug</h1>
+        </div>
+
+        <div class="topbar-center">
+          <%= link_to "Projects", projects_path, class: "topbar-link" %>
+          <span class="topbar-link disabled">Bugs</span>
+        </div>
+
+        <div class="topbar-right">
+          <%= link_to edit_user_registration_path, class: "topbar-button" do %>
+            <%= current_user.name %>
+          <% end %>
+          <%= link_to "Logout", destroy_user_session_path,
+                method: :delete,
+                data: { turbo_method: :delete },
+                class: "topbar-link logout-link" %>
+        </div>
+      </nav>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>

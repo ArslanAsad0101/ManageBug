@@ -1,6 +1,6 @@
 class Project < ApplicationRecord
-  # before_action :authenticate_user!
-  belongs_to :user
+  belongs_to :manager, class_name: "User", foreign_key: :manager_id
+  has_many :project_users, dependent: :destroy
 
   validates :name, presence: true
   validates :description, presence: true

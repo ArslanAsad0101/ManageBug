@@ -1,0 +1,19 @@
+<h1>Bug Tracking System</h1>
+
+<h2>Select Your Role</h2>
+
+<div>
+  <%= link_to "Manager", new_user_session_path(role: "manager") %>
+</div>
+
+<br>
+
+<div>
+  <%= link_to "QA", new_user_session_path(role: "qa") %>
+</div>
+
+<br>
+
+<div>
+  <%= link_to "Developer", new_user_session_path(role: "developer") %>
+</div>

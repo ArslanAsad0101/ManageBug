@@ -1,33 +1,51 @@
 class ProjectsController < ApplicationController
-    load_and_authorize_resource
-    before_action :authenticate_user!
+  before_action :authenticate_user!
+  load_and_authorize_resource
+
+  def index
+    @projects = Project.all
+  end
+
+
+  def new
+    # @qas = User.qa
+    # @developers = User.developer
+  end
+
+
+  def create
+  @project = current_user.projects.build(project_params)
+
+  if @project.save
+    redirect_to projects_path, notice: "Project created successfully."
+  else
+    render :new, status: :unprocessable_entity
+  end
+end
 
 
 
-    def index
-        @projects = Project.all
-    end
+  private
+
+
+  def project_params
+    params.require(:project).permit(:name, :description)
+  end
 
 
 
-    def new
-    end
-    def create
-        @project = Project.new(project_params)
-        @project.user = current_user
-        if @project.save
-            redirect_to projects_path, notice: "Project created successfully."
-        else
-            render :new
-        end
-    end
+  # def assign_users
 
+  #   user_ids = params[:project][:user_ids]
 
+  #   user_ids.each do |user_id|
 
+  #     @project.assigned_qa_developers.create(
+  #       user_id: user_id
+  #     )
 
-    private
-    def project_params
-        params.require(:project).permit(:name, :description)
-    end
+  #   end
+
+  # end
 
 end

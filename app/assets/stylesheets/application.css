@@ -8,3 +8,54 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+.topbar-left,
+.topbar-center,
+.topbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.topbar-left {
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+.topbar-center {
+  justify-content: center;
+  gap: 1rem;
+}
+
+.topbar-right {
+  justify-content: flex-end;
+}
+
+.topbar-link {
+  color: #1f2937;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.topbar-link:hover {
+  text-decoration: underline;
+}
+
+.topbar-link.disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.separator {
+  color: #6b7280;
+}

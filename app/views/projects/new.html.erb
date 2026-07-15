@@ -1,26 +1,56 @@
-<%= form_with model: @project, local: true do |form| %>
-  <% if @project.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@project.errors.count, "error") %> prohibited this project from being saved:</h2>
+<h1>Create Project</h1>
 
-      <ul>
-        <% @project.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<%= form_with model: @project do |form| %>
 
-  <div class="field">
+  <div>
     <%= form.label :name %>
     <%= form.text_field :name %>
   </div>
 
-  <div class="field">
+  <div>
     <%= form.label :description %>
     <%= form.text_area :description %>
   </div>
 
-  <div class="actions">
-    <%= form.submit %>
+  <% if false %>
+    <h3>Select QA</h3>
+
+    <%= form.collection_check_boxes(
+          :user_ids,
+          @qas,
+          :id,
+          :name
+        ) do |box| %>
+
+      <div>
+        <%= box.check_box %>
+        <%= box.label %>
+      </div>
+
+    <% end %>
+  <% end %>
+
+
+  <% if false %>
+    <h3>Select Developers</h3>
+
+    <%= form.collection_check_boxes(
+          :user_ids,
+          @developers,
+          :id,
+          :name
+        ) do |box| %>
+
+      <div>
+        <%= box.check_box %>
+        <%= box.label %>
+      </div>
+
+    <% end %>
+  <% end %>
+
+  <div>
+    <%= form.submit "Create Project" %>
   </div>
+
+<% end %>

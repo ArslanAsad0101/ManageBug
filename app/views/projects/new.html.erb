@@ -2,6 +2,12 @@
 
 <%= form_with model: @project do |form| %>
 
+
+  <div>
+  <%= form.label :image %>
+  <%= form.file_field :image, accept: "image/png,image/jpeg" %>
+</div>
+
   <div>
     <%= form.label :name %>
     <%= form.text_field :name %>

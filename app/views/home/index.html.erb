@@ -1,19 +1,44 @@
-<h1>Bug Tracking System</h1>
+<!-- app/views/home/index.html.erb -->
+<div class="auth-page">
+  <div class="auth-panel auth-panel-dark">
+    <div class="auth-brand">
+      <div class="auth-logo">ManageBug</div>
+      <div class="auth-tag">Build better products</div>
+    </div>
 
-<h2>Select Your Role</h2>
+    <div class="auth-preview">
+      <div class="preview-box">
+        <!-- blank black section -->
+      </div>
+    </div>
 
-<div>
-  <%= link_to "Manager", new_user_session_path(role: "manager") %>
-</div>
+    <div class="auth-footer">
+      <span>Already have an account?</span>
+      <%= link_to "Sign in", new_user_session_path, class: "auth-link" %>
+    </div>
+  </div>
 
-<br>
+  <div class="auth-panel auth-panel-light">
+    <div class="auth-heading">Join Us!</div>
+    <p class="auth-text">
+      To begin this journey, tell us what type of account you'd be opening.
+    </p>
 
-<div>
-  <%= link_to "QA", new_user_session_path(role: "qa") %>
-</div>
+    <div class="role-cards">
+      <%= link_to new_user_registration_path(role: "manager"), class: "role-card" do %>
+        <div class="role-card-title">Manager</div>
+        <div class="role-card-desc">Signup as a manager to manage the tasks and bugs.</div>
+      <% end %>
 
-<br>
+      <%= link_to new_user_registration_path(role: "developer"), class: "role-card" do %>
+        <div class="role-card-title">Developer</div>
+        <div class="role-card-desc">Signup as a developer to assign the relevant task to QA.</div>
+      <% end %>
 
-<div>
-  <%= link_to "Developer", new_user_session_path(role: "developer") %>
+      <%= link_to new_user_registration_path(role: "qa"), class: "role-card" do %>
+        <div class="role-card-title">QA</div>
+        <div class="role-card-desc">Signup as a QA to create bugs and report in tasks.</div>
+      <% end %>
+    </div>
+  </div>
 </div>

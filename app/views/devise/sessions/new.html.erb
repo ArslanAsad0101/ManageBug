@@ -1,26 +1,39 @@
-<h2>Log in</h2>
-
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <p><%= f.label :email %></p>
-    <p><%= f.email_field :email, autofocus: true, autocomplete: "email" %></p>
-  </div>
-
-  <div class="field">
-    <p><%= f.label :password %></p>
-    <p><%= f.password_field :password, autocomplete: "current-password" %></p>
-  </div>
-
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <p><%= f.check_box :remember_me %></p>
-      <p><%= f.label :remember_me %></p>
+<!-- app/views/devise/sessions/new.html.erb -->
+<div class="auth-page">
+  <div class="auth-panel auth-panel-dark">
+    <div class="auth-brand">
+      <div class="auth-logo">ManageBug</div>
+      <div class="auth-tag">Back to your workspace</div>
     </div>
-  <% end %>
 
-  <div class="actions">
-    <%= f.submit "Log in" %>
+    <div class="auth-preview">
+      <div class="preview-box"></div>
+    </div>
+
+    <div class="auth-footer">
+      <span>New to ManageBug?</span>
+      <%= link_to "Create an account", new_user_registration_path, class: "auth-link" %>
+    </div>
   </div>
-<% end %>
 
-<%= render "devise/shared/links" %>
+  <div class="auth-panel auth-panel-light">
+    <div class="auth-heading">Sign Up</div>
+    <p class="auth-text">Please fill your information below</p>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="form-group">
+        <%= f.label :email, "E-mail" %>
+        <%= f.email_field :email, class: "form-control", autocomplete: "email" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password, "Password" %>
+        <%= f.password_field :password, class: "form-control", autocomplete: "current-password" %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "Login", class: "button button-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

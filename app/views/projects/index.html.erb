@@ -8,7 +8,13 @@
 
 <% end %>
 
-<ul>
+<div class="projects-grid">
   <% @projects.each do |project| %>
-    <li><%= project.name %> - <%= project.description %></li>
+    <%= link_to project_path(project), class: "project-card-link" do %>
+      <div class="project-card">
+        <h3><%= project.name %></h3>
+        <p><%= project.description %></p>
+      </div>
+    <% end %>
   <% end %>
+</div>

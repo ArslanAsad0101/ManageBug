@@ -1,0 +1,6 @@
+<h1><%= @project.name %></h1>
+
+<p><strong>Description:</strong></p>
+<p><%= @project.description.present? ? @project.description : "No description provided." %></p>
+
+<%= link_to "Back to Projects", projects_path %>

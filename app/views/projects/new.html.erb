@@ -12,42 +12,17 @@
     <%= form.text_area :description %>
   </div>
 
-  <% if false %>
-    <h3>Select QA</h3>
+  <div>
+    <%= label_tag "project[qa_user_ids][]", "Select QA" %><br>
+    <%= select_tag "project[qa_user_ids][]",
+          options_from_collection_for_select(@qas, :id, :name)%>
+  </div>
 
-    <%= form.collection_check_boxes(
-          :user_ids,
-          @qas,
-          :id,
-          :name
-        ) do |box| %>
-
-      <div>
-        <%= box.check_box %>
-        <%= box.label %>
-      </div>
-
-    <% end %>
-  <% end %>
-
-
-  <% if false %>
-    <h3>Select Developers</h3>
-
-    <%= form.collection_check_boxes(
-          :user_ids,
-          @developers,
-          :id,
-          :name
-        ) do |box| %>
-
-      <div>
-        <%= box.check_box %>
-        <%= box.label %>
-      </div>
-
-    <% end %>
-  <% end %>
+  <div>
+    <%= label_tag "project[developer_user_ids][]", "Select Developers" %><br>
+    <%= select_tag "project[developer_user_ids][]",
+          options_from_collection_for_select(@developers, :id, :name) %>
+  </div>
 
   <div>
     <%= form.submit "Create Project" %>

@@ -1,11 +1,6 @@
 class User < ApplicationRecord
   has_many :projects, foreign_key: :manager_id, dependent: :destroy
-  # has_many :managed_projects,
-  #          class_name: "Project",
-  #          foreign_key: :manager_id,
-  #          dependent: :destroy
-
-  # has_many :project_user, dependent: :destroy
+  has_many :project_users, dependent: :destroy
 
   devise :database_authenticatable,
          :registerable,

@@ -1,0 +1,21 @@
+<h1>Bug Dashboard</h1>
+
+<%= link_to "Add Bug", new_bug_path, class: "button" %>
+
+<% if current_user.qa? %>
+  <h2>Your reported bugs</h2>
+<% elsif current_user.developer? %>
+  <h2>Your assigned bugs</h2>
+<% else %>
+  <h2>Bugs for your projects</h2>
+<% end %>
+
+<% @bugs.each do |bug| %>
+  <div class="bug-card">
+    <h3><%= bug.title %></h3>
+    <p>Project: <%= bug.project.name %></p>
+    <p>Status: <%= bug.status %></p>
+    <p>Reporter: <%= bug.reporter.name %></p>
+    <p>Developer: <%= bug.developer.name %></p>
+  </div>
+<% end %>

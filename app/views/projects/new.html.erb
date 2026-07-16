@@ -5,30 +5,37 @@
 
   <div>
   <%= form.label :image %>
+  <br>
   <%= form.file_field :image, accept: "image/png,image/jpeg" %>
 </div>
 
+<br>
+
   <div>
     <%= form.label :name %>
+    <br>
     <%= form.text_field :name %>
   </div>
-
+<br>
   <div>
     <%= form.label :description %>
+    <br><br>
     <%= form.text_area :description %>
   </div>
-
+<br>
   <div>
     <%= label_tag "project[qa_user_ids][]", "Select QA" %><br>
     <%= select_tag "project[qa_user_ids][]",
           options_from_collection_for_select(@qas, :id, :name)%>
   </div>
+  <br>
 
   <div>
     <%= label_tag "project[developer_user_ids][]", "Select Developers" %><br>
     <%= select_tag "project[developer_user_ids][]",
           options_from_collection_for_select(@developers, :id, :name) %>
   </div>
+  <br>
 
   <div>
     <%= form.submit "Create Project" %>

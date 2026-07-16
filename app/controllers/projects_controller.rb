@@ -3,7 +3,11 @@ class ProjectsController < ApplicationController
   load_and_authorize_resource
 
   def index
+if params[:search].present?
+    @projects = Project.where("name LIKE ?", "%#{params[:search]}%")
+  else
     @projects = Project.all
+  end
   end
 
 

@@ -1,4 +1,13 @@
 <h1>Projects</h1>
+<%= form_with url: projects_path, method: :get, local: true do |form| %>
+  <%= form.label :search, "Search Project" %>
+
+  <%= form.text_field :search,
+      value: params[:search],
+      placeholder: "Enter project name" %>
+
+  <%= form.submit "Search" %>
+<% end %>
 
 
 <% if can? :create, Project %>

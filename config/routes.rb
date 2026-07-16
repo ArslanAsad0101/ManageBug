@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
-  # get "home/index"
   devise_for :users
-  get "up" => "rails/health#show", as: :rails_health_check
-  root to: "home#index"
 
-  resources :projects
-  
+  root "home#index"
+
+  resources :bugs, only: [:index, :new]
+
+  resources :projects do
+    resources :bugs, except: [:index, :new]
+  end
 end

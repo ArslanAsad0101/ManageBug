@@ -1,0 +1,8 @@
+<h1><%= @bug.title %></h1>
+<p>Project: <%= @bug.project.name %></p>
+<p>Status: <%= @bug.status %></p>
+<p>Type: <%= @bug.bug_type %></p>
+<p>Developer: <%= @bug.developer.name %></p>
+<p>Reporter: <%= @bug.reporter.name %></p>
+<p><%= @bug.description %></p>
+<%= link_to "Back", bugs_path %>

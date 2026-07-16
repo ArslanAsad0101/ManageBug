@@ -1,0 +1,74 @@
+<h1>Create Bug</h1>
+
+<% if @projects.empty? %>
+  <p>You have no assigned projects to file a bug for.</p>
+<% else %>
+  <%= form_with model: @bug,
+      url: project_bugs_path(@projects.first),
+      local: true,
+      html: { id: "new-bug-form", multipart: true } do |form| %>
+
+    <div>
+      <%= form.label :project_id, "Project" %>
+      <%= form.collection_select :project_id,
+            @projects,
+            :id,
+            :name,
+            prompt: "Select a project",
+            onchange: "updateBugFormAction(this)" %>
+    </div>
+
+    <div>
+      <%= form.label :title %>
+      <%= form.text_field :title %>
+    </div>
+
+    <div>
+      <%= form.label :description %>
+      <%= form.text_area :description %>
+    </div>
+
+    <div>
+      <%= form.label :deadline %>
+      <%= form.date_field :deadline %>
+    </div>
+
+    <div>
+      <%= form.label :bug_type %>
+      <%= form.select :bug_type,
+          Bug.bug_types.keys.map { |type| [type.titleize, type] } %>
+    </div>
+
+    <div>
+      <%= form.label :developer %>
+      <%= form.collection_select(
+            :developer_id,
+            @developers,
+            :id,
+            :name,
+            prompt: "Select developer"
+          ) %>
+    </div>
+
+    <div>
+      <%= form.label :screenshot %>
+      <%= form.file_field :screenshot %>
+    </div>
+
+    <%= form.hidden_field :status, value: "pending" %>
+
+    <%= form.submit "Create Bug" %>
+  <% end %>
+
+  <script>
+    function updateBugFormAction(select) {
+      var projectId = select.value;
+      var form = document.getElementById("new-bug-form");
+      if (!projectId) {
+        form.action = "<%= project_bugs_path(@projects.first) %>";
+      } else {
+        form.action = "/projects/" + projectId + "/bugs";
+      }
+    }
+  </script>
+<% end %>

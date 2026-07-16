@@ -6,5 +6,8 @@
 
 <p><strong>Description:</strong></p>
 <p><%= @project.description.present? ? @project.description : "No description provided." %></p>
+# <% if current_user.qa? %>
+#   <!-- Add QA-specific content here if needed -->
+# <% end %>
 
 <%= link_to "Back to Projects", projects_path %>

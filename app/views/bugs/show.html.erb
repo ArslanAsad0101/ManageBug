@@ -5,12 +5,13 @@
 <p>Developer: <%= @bug.developer.name %></p>
 <p>Reporter: <%= @bug.reporter.name %></p>
 <p><%= @bug.description %></p>
+
 <%= link_to "Back", bugs_path %>
 
+<% if (current_user.qa? && @bug.reporter_id == current_user.id) || (current_user.developer? && @bug.developer_id == current_user.id) %>
+  <%= link_to "Edit", edit_project_bug_path(@project, @bug), class: "button button-primary" %>
+<% end %>
 
-
-<% if can? :update, @bug %>
-  <%= link_to "Edit",
-      edit_project_bug_path(@project, @bug),
-      class: "button button-primary" %>
+<% if can? :destroy, @bug %>
+  <%= link_to "Delete", project_bug_path(@project, @bug), method: :delete, data: { confirm: "Are you sure?" }, class: "button button-danger" %>
 <% end %>

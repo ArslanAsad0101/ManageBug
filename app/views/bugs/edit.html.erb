@@ -3,7 +3,7 @@
     <div>
       <h1 class="page-title">Edit Bug</h1>
     </div>
-    <%= link_to "Back to Bugs", bugs_path, class: "button button-secondary" %>
+    <%= link_to "Back to Bug", project_bug_path(@project, @bug), class: "button button-secondary" %>
   </div>
 
   <div class="form-card">
@@ -12,55 +12,90 @@
         local: true,
         html: { id: "edit-bug-form", multipart: true } do |form| %>
 
-      <div class="form-row">
-        <%= form.label :title, class: "field-label" %>
-        <%= form.text_field :title, class: "input-field", placeholder: "Bug title" %>
-      </div>
-
-      <div class="form-row">
-        <%= form.label :description, class: "field-label" %>
-        <%= form.text_area :description, class: "input-field", rows: 4, placeholder: "Describe the bug" %>
-      </div>
-
-      <div class="form-row form-row-split">
-        <div>
-          <%= form.label :deadline, class: "field-label" %>
-          <%= form.date_field :deadline, class: "input-field" %>
+      <% if @is_developer %>
+        <!-- DEVELOPER VIEW: All fields disabled except status -->
+        <div class="form-row">
+          <p><strong>Bug Title:</strong> <%= @bug.title %></p>
         </div>
-        <div>
-          <%= form.label :bug_type, class: "field-label" %>
-          <%= form.select :bug_type,
-              Bug.bug_types.keys.map { |type| [type.titleize, type] },
+
+        <div class="form-row">
+          <p><strong>Description:</strong> <%= @bug.description %></p>
+        </div>
+
+        <div class="form-row form-row-split">
+          <div>
+            <p><strong>Deadline:</strong> <%= @bug.deadline.present? ? @bug.deadline.strftime("%b %d, %Y") : "—" %></p>
+          </div>
+          <div>
+            <p><strong>Bug Type:</strong> <%= @bug.bug_type.titleize %></p>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <p><strong>Reporter:</strong> <%= @bug.reporter.name %></p>
+        </div>
+
+        <!-- ONLY editable field for developer -->
+        <div class="form-row">
+          <%= form.label :status, "Update Status", class: "field-label" %>
+          <%= form.select :status,
+              ["pending", "in_progress", "resolved", "closed"],
+              { selected: @bug.status },
+              class: "input-field" %>
+        </div>
+
+      <% else %>
+        <!-- QA VIEW: All fields editable -->
+        <div class="form-row">
+          <%= form.label :title, class: "field-label" %>
+          <%= form.text_field :title, class: "input-field", placeholder: "Bug title" %>
+        </div>
+
+        <div class="form-row">
+          <%= form.label :description, class: "field-label" %>
+          <%= form.text_area :description, class: "input-field", rows: 4, placeholder: "Describe the bug" %>
+        </div>
+
+        <div class="form-row form-row-split">
+          <div>
+            <%= form.label :deadline, class: "field-label" %>
+            <%= form.date_field :deadline, class: "input-field" %>
+          </div>
+          <div>
+            <%= form.label :bug_type, class: "field-label" %>
+            <%= form.select :bug_type,
+                Bug.bug_types.keys.map { |type| [type.titleize, type] },
+                {},
+                class: "input-field" %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <%= form.label :status, class: "field-label" %>
+          <%= form.select :status,
+              ["pending", "in_progress", "resolved", "closed"],
               {},
               class: "input-field" %>
         </div>
-      </div>
 
-      <div class="form-row">
-        <%= form.label :status, class: "field-label" %>
-        <%= form.select :status,
-            ["pending", "in_progress", "resolved", "closed"],
-            {},
-            class: "input-field" %>
-      </div>
+        <div class="form-row">
+          <%= form.label :developer_id, "Assign Developer", class: "field-label" %>
+          <%= form.collection_select(:developer_id,
+                @developers,
+                :id,
+                :name,
+                { prompt: "Select developer" },
+                class: "input-field") %>
+        </div>
 
-      <div class="form-row">
-        <%= form.label :developer_id, "Assign Developer", class: "field-label" %>
-        <%= form.collection_select(:developer_id,
-              @developers,
-              :id,
-              :name,
-              { prompt: "Select developer" },
-              class: "input-field") %>
-      </div>
-
-      <div class="form-row">
-        <%= form.label :screenshot, class: "field-label" %>
-        <%= form.file_field :screenshot, class: "input-field", accept: "image/*" %>
-      </div>
+        <div class="form-row">
+          <%= form.label :screenshot, class: "field-label" %>
+          <%= form.file_field :screenshot, class: "input-field", accept: "image/*" %>
+        </div>
+      <% end %>
 
       <div class="actions-row">
-        <%= form.submit "Update Bug", class: "button button-primary" %>
+        <%= form.submit (@is_developer ? "Update Status" : "Update Bug"), class: "button button-primary" %>
         <%= link_to "Cancel", project_bug_path(@project, @bug), class: "button button-secondary" %>
       </div>
 

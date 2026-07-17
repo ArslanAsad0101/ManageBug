@@ -28,6 +28,7 @@
           <th>Due date</th>
           <th>Assigned to</th>
           <th>Project</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -38,6 +39,21 @@
             <td><%= bug.deadline.present? ? bug.deadline.strftime("%b %d, %Y") : "—" %></td>
             <td><%= bug.developer.name %></td>
             <td><%= bug.project.name %></td>
+            <td onclick="event.stopPropagation();">
+              <div class="action-dropdown">
+                <button class="action-menu-btn">⋮</button>
+                <div class="dropdown-menu">
+                  <div class="dropdown-header">Change Status</div>
+                  <%= form_with url: edit_project_bug_path(bug.project, bug), method: :patch, local: true, class: "status-form" do |form| %>
+                    <% ["pending", "in_progress", "resolved", "closed"].each do |status| %>
+                      <%= form.submit status.titleize, name: "bug[status]", value: status, class: "dropdown-item status-#{status}" %>
+                    <% end %>
+                  <% end %>
+                  <div class="dropdown-divider"></div>
+                  <%= link_to "Delete", project_bug_path(bug.project, bug), method: :delete, data: { confirm: "Are you sure?" }, class: "dropdown-item delete-item" %>
+                </div>
+              </div>
+            </td>
           </tr>
         <% end %>
       </tbody>

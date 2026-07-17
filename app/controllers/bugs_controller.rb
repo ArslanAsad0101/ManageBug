@@ -34,32 +34,24 @@ class BugsController < ApplicationController
     
   end
 
- def edit
+def edit
+  authorize! :update, @bug
   @developers = User.developer
-  @projects = current_user.assigned_projects
+  @is_developer = current_user.developer?
 end
 
- def update
+def update
   # authorize! :update, @bug
+  
   if @bug.update(bug_params)
-    redirect_to project_bug_path(@project, @bug),
-      notice: "Bug updated successfully."
+    redirect_to project_bug_path(@project, @bug), notice: "Bug updated successfully."
   else
     @developers = User.developer
+    @is_developer = current_user.developer?
     render :edit, status: :unprocessable_entity
   end
-
-# def update_status
-#   authorize! :update_status, @bug
-
-#   if @bug.update(status: params[:status])
-#     redirect_to bugs_path, notice: "Status updated."
-#   else
-#     redirect_to bugs_path, alert: "Unable to update."
-#   end
-# end
-
 end
+
   def destroy
     @bug.destroy
     redirect_to bugs_path, notice: "Bug deleted successfully."
@@ -77,7 +69,12 @@ end
     @bug = @project.bugs.find(params[:id])
   end
 
-  def bug_params
+def bug_params
+  if current_user.developer?
+    # Developers can ONLY update status
+    params.require(:bug).permit(:status)
+  else
+    # QA can update all fields
     params.require(:bug).permit(
       :title,
       :description,
@@ -88,4 +85,5 @@ end
       :screenshot
     )
   end
+end
 end

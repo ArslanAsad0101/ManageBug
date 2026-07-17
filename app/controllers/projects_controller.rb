@@ -2,13 +2,19 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
 
-  def index
-if params[:search].present?
-    @projects = Project.where("name LIKE ?", "%#{params[:search]}%")
+def index
+  @projects = if current_user.manager?
+    # Manager sees only their own projects
+    Project.where(manager_id: current_user.id)
   else
-    @projects = Project.all
+    # Developer and QA see projects they are assigned to
+    current_user.assigned_projects
   end
+
+  if params[:search].present?
+    @projects = @projects.where("name LIKE ?", "%#{params[:search]}%")
   end
+end
 
 
 

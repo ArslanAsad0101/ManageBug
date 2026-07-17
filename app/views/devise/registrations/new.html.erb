@@ -20,7 +20,11 @@
     <div class="auth-heading">Sign Up</div>
     <p class="auth-text">Please fill your information below</p>
 
+    <%= render 'devise/shared/error_messages', resource: resource %>
+
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <% selected_role = params[:role].presence || resource.role.presence || "developer" %>
+
       <div class="form-group">
         <%= f.label :name, "Name" %>
         <%= f.text_field :name, class: "form-control", autocomplete: "name" %>
@@ -29,6 +33,12 @@
       <div class="form-group">
         <%= f.label :phone_number, "Mobile number" %>
         <%= f.telephone_field :phone_number, class: "form-control", autocomplete: "tel" %>
+      </div>
+
+      <div class="form-group">
+        <label>Role</label>
+        <div class="form-control" style="background: #f8f9fa; border: 1px solid #dfe3e8; padding: 0.75rem 1rem;">You are signing up as <strong><%= selected_role.titleize %></strong></div>
+        <%= f.hidden_field :role, value: selected_role %>
       </div>
 
       <div class="form-group">

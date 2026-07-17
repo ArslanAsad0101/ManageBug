@@ -1,30 +1,21 @@
 class BugsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_project, except: [:index, :new]
-  before_action :set_bug, only: [:show, :edit, :update, :destroy]
+  before_action :set_bug, only: [:show, :update, :destroy, :edit]
 
   def index
-    @bugs =
-      if current_user.qa?
-        current_user.reported_bugs
-      elsif current_user.developer?
-        current_user.assigned_bugs
-      elsif current_user.manager?
-        Bug.joins(:project).where(projects: { manager_id: current_user.id })
-      else
-        Bug.none
-      end
+    @bugs = Bug.accessible_by(current_ability)
   end
 
   def new
-    authorize! :create, Bug
+    # authorize! :create, Bug
     @bug = Bug.new
-    @developers = User.developer
     @projects = current_user.assigned_projects
+@developers = User.developer
   end
 
    def create
-    authorize! :create, Bug
+    # authorize! :create, Bug
     @project = Project.find(params[:project_id])
     @bug = @project.bugs.build(bug_params)
     @bug.reporter = current_user
@@ -40,20 +31,35 @@ class BugsController < ApplicationController
   end
 
   def show
+    
   end
 
-  def edit
+ def edit
+  @developers = User.developer
+  @projects = current_user.assigned_projects
+end
+
+ def update
+  # authorize! :update, @bug
+  if @bug.update(bug_params)
+    redirect_to project_bug_path(@project, @bug),
+      notice: "Bug updated successfully."
+  else
+    @developers = User.developer
+    render :edit, status: :unprocessable_entity
   end
 
-  def update
-    if @bug.update(bug_params)
-      redirect_to project_bug_path(@project, @bug), notice: "Bug updated successfully."
-    else
-      @developers = User.developer
-      render :edit, status: :unprocessable_entity
-    end
-  end
+# def update_status
+#   authorize! :update_status, @bug
 
+#   if @bug.update(status: params[:status])
+#     redirect_to bugs_path, notice: "Status updated."
+#   else
+#     redirect_to bugs_path, alert: "Unable to update."
+#   end
+# end
+
+end
   def destroy
     @bug.destroy
     redirect_to bugs_path, notice: "Bug deleted successfully."

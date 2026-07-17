@@ -6,3 +6,11 @@
 <p>Reporter: <%= @bug.reporter.name %></p>
 <p><%= @bug.description %></p>
 <%= link_to "Back", bugs_path %>
+
+
+
+<% if can? :update, @bug %>
+  <%= link_to "Edit",
+      edit_project_bug_path(@project, @bug),
+      class: "button button-primary" %>
+<% end %>

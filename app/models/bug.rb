@@ -1,16 +1,8 @@
 class Bug < ApplicationRecord
-
-  belongs_to :project
-
-
-  belongs_to :reporter,
-             class_name: "User"
-
-
-  belongs_to :developer,
-             class_name: "User"
-
-             has_one_attached :screenshot
+belongs_to :project
+belongs_to :reporter, class_name: "User"
+belongs_to :developer, class_name: "User"
+has_one_attached :screenshot
 
 
   enum :bug_type, {
@@ -21,8 +13,9 @@ class Bug < ApplicationRecord
 
   enum :status, {
     pending: 0,
-    in_progress: 1,
-    closed: 2
+    started: 1,
+    resolved: 2,
+    completed: 3
   }
 
 

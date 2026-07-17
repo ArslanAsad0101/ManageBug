@@ -13,8 +13,8 @@ if params[:search].present?
 
 
 def new
-  @qas = User.where(role: :qa)
-  @developers = User.where(role: :developer)
+  @qas = User.qa
+  @developers = User.developer
 end
 
   def create
@@ -37,6 +37,20 @@ end
 
 def show
   @project = Project.find(params[:id])
+end
+
+
+
+def edit
+  @qas = User.qa
+  @developers = User.developer
+end
+def update
+  if @project.update(project_params)
+    redirect_to project_path(@project), notice: "Project updated successfully."
+  else
+    render :edit
+  end 
 end
   private
 

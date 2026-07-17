@@ -3,9 +3,9 @@ Rails.application.routes.draw do
 
   root "home#index"
 
-  resources :bugs, only: [:index, :new]
+  resources :bugs, only: [:index, :new, :show, :edit, :update]
 
   resources :projects do
-    resources :bugs, except: [:index, :new]
+    resources :bugs, except: [:index, :new] 
   end
 end

@@ -1,0 +1,42 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Edit Project</h1>
+    </div>
+    <%= link_to "Back to Projects", projects_path, class: "button button-secondary" %>
+  </div>
+
+  <div class="form-card">
+    <%= form_with model: @project,
+        url: project_path(@project),
+        local: true,
+        html: { id: "edit-project-form", multipart: true } do |form| %>
+
+      <div class="form-row">
+        <%= form.label :name, class: "field-label" %>
+        <%= form.text_field :name, class: "input-field", placeholder: "Project name" %>
+      </div>
+
+      <div class="form-row">
+        <%= form.label :description, class: "field-label" %>
+        <%= form.text_area :description, class: "input-field", rows: 5, placeholder: "Project description" %>
+      </div>
+
+      <div class="form-row">
+        <%= form.label :image, "Project Image", class: "field-label" %>
+        <%= form.file_field :image, class: "input-field", accept: "image/*" %>
+        <% if @project.image.attached? %>
+          <div class="image-preview">
+            <%= image_tag @project.image, alt: @project.name, style: "max-width: 200px; margin-top: 10px;" %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="actions-row">
+        <%= form.submit "Update Project", class: "button button-primary" %>
+        <%= link_to "Cancel", project_path(@project), class: "button button-secondary" %>
+      </div>
+
+    <% end %>
+  </div>
+</div>

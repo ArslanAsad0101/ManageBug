@@ -123,6 +123,9 @@ GEM
     drb (2.2.3)
     ed25519 (1.4.0)
     erb (6.0.4)
+    erd (0.8.2)
+      nokogiri
+      ruby-graphviz
     erubi (1.13.1)
     et-orbi (1.4.0)
       tzinfo
@@ -331,6 +334,8 @@ GEM
       rubocop (>= 1.72)
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
+    ruby-graphviz (1.2.5)
+      rexml
     ruby-progressbar (1.13.0)
     ruby-vips (2.3.0)
       ffi (~> 1.12)
@@ -422,6 +427,7 @@ DEPENDENCIES
   debug
   devise
   dotenv-rails
+  erd (~> 0.8.2)
   image_processing (~> 1.2)
   importmap-rails
   jbuilder

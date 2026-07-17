@@ -1,0 +1,69 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Edit Bug</h1>
+    </div>
+    <%= link_to "Back to Bugs", bugs_path, class: "button button-secondary" %>
+  </div>
+
+  <div class="form-card">
+    <%= form_with model: @bug,
+        url: project_bug_path(@project, @bug),
+        local: true,
+        html: { id: "edit-bug-form", multipart: true } do |form| %>
+
+      <div class="form-row">
+        <%= form.label :title, class: "field-label" %>
+        <%= form.text_field :title, class: "input-field", placeholder: "Bug title" %>
+      </div>
+
+      <div class="form-row">
+        <%= form.label :description, class: "field-label" %>
+        <%= form.text_area :description, class: "input-field", rows: 4, placeholder: "Describe the bug" %>
+      </div>
+
+      <div class="form-row form-row-split">
+        <div>
+          <%= form.label :deadline, class: "field-label" %>
+          <%= form.date_field :deadline, class: "input-field" %>
+        </div>
+        <div>
+          <%= form.label :bug_type, class: "field-label" %>
+          <%= form.select :bug_type,
+              Bug.bug_types.keys.map { |type| [type.titleize, type] },
+              {},
+              class: "input-field" %>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <%= form.label :status, class: "field-label" %>
+        <%= form.select :status,
+            ["pending", "in_progress", "resolved", "closed"],
+            {},
+            class: "input-field" %>
+      </div>
+
+      <div class="form-row">
+        <%= form.label :developer_id, "Assign Developer", class: "field-label" %>
+        <%= form.collection_select(:developer_id,
+              @developers,
+              :id,
+              :name,
+              { prompt: "Select developer" },
+              class: "input-field") %>
+      </div>
+
+      <div class="form-row">
+        <%= form.label :screenshot, class: "field-label" %>
+        <%= form.file_field :screenshot, class: "input-field", accept: "image/*" %>
+      </div>
+
+      <div class="actions-row">
+        <%= form.submit "Update Bug", class: "button button-primary" %>
+        <%= link_to "Cancel", project_bug_path(@project, @bug), class: "button button-secondary" %>
+      </div>
+
+    <% end %>
+  </div>
+</div>

@@ -1,32 +1,36 @@
-<h1>Projects</h1>
-<%= form_with url: projects_path, method: :get, local: true do |form| %>
-  <%= form.label :search, "Search Project" %>
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <p class="page-label">Projects</p>
+      <h1 class="page-title">Manage your projects</h1>
+    </div>
 
-  <%= form.text_field :search,
-      value: params[:search],
-      placeholder: "Enter project name" %>
+    <% if can? :create, Project %>
+      <%= link_to "Add New Project", new_project_path, class: "button button-primary" %>
+    <% end %>
+  </div>
 
-  <%= form.submit "Search" %>
-<% end %>
-
-
-<% if can? :create, Project %>
-
-  <%= link_to "New Project",
-      new_project_path %>
-
-<% end %>
-
-<div class="projects-grid">
-  <% @projects.each do |project| %>
-    <%= link_to project_path(project), class: "project-card-link" do %>
-      <div class="project-card">
-       <% if project.image.attached? %>
-    <%= image_tag project.image, width: 80, height: 80 %>
-  <% end %>
-        <h3><%= project.name %></h3>
-        <p><%= project.description %></p>
+  <div class="search-bar">
+    <%= form_with url: projects_path, method: :get, local: true do |form| %>
+      <div class="search-row">
+        <%= form.search_field :search,
+            value: params[:search],
+            placeholder: "Search projects",
+            class: "input-field" %>
+        <%= form.submit "Search", class: "button button-secondary" %>
       </div>
     <% end %>
-  <% end %>
+  </div>
+
+  <div class="projects-grid">
+    <% @projects.each do |project| %>
+      <%= link_to project_path(project), class: "project-card-link" do %>
+        <div class="project-card">
+          <div class="project-card-badge"><%= project.name.first.upcase %></div>
+          <h3><%= project.name %></h3>
+          <p><%= truncate(project.description, length: 100) %></p>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
 </div>

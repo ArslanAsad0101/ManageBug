@@ -1,44 +1,47 @@
-<h1>Create Project</h1>
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <p class="page-label">Projects</p>
+      <h1 class="page-title">Create Project</h1>
+      <p class="page-description">Add a new project and assign QA and developers.</p>
+    </div>
+  </div>
 
-<%= form_with model: @project do |form| %>
+  <div class="form-card">
+    <%= form_with model: @project, local: true do |form| %>
+      <div class="form-row">
+        <%= form.label :image, class: "field-label" %>
+        <%= form.file_field :image, accept: "image/png,image/jpeg", class: "input-field" %>
+      </div>
 
+      <div class="form-row">
+        <%= form.label :name, class: "field-label" %>
+        <%= form.text_field :name, class: "input-field" %>
+      </div>
 
-  <div>
-  <%= form.label :image %>
-  <br>
-  <%= form.file_field :image, accept: "image/png,image/jpeg" %>
+      <div class="form-row">
+        <%= form.label :description, class: "field-label" %>
+        <%= form.text_area :description, class: "input-field", rows: 4 %>
+      </div>
+
+      <div class="form-row">
+        <%= label_tag "project[qa_user_ids][]", "Select QA", class: "field-label" %>
+        <%= select_tag "project[qa_user_ids][]",
+              options_from_collection_for_select(@qas, :id, :name),
+              class: "input-field" %>
+      </div>
+
+      <div class="form-row">
+        <%= label_tag "project[developer_user_ids][]", "Select Developers", class: "field-label" %>
+        <%= select_tag "project[developer_user_ids][]",
+              options_from_collection_for_select(@developers, :id, :name),
+              class: "input-field" %>
+      </div>
+
+      <div class="actions-row">
+        <%= form.submit "Create Project", class: "button button-primary" %>
+        <%= link_to "Cancel", projects_path, class: "button button-secondary" %>
+      </div>
+    <% end %>
+  </div>
 </div>
-
-<br>
-
-  <div>
-    <%= form.label :name %>
-    <br>
-    <%= form.text_field :name %>
-  </div>
-<br>
-  <div>
-    <%= form.label :description %>
-    <br><br>
-    <%= form.text_area :description %>
-  </div>
-<br>
-  <div>
-    <%= label_tag "project[qa_user_ids][]", "Select QA" %><br>
-    <%= select_tag "project[qa_user_ids][]",
-          options_from_collection_for_select(@qas, :id, :name)%>
-  </div>
-  <br>
-
-  <div>
-    <%= label_tag "project[developer_user_ids][]", "Select Developers" %><br>
-    <%= select_tag "project[developer_user_ids][]",
-          options_from_collection_for_select(@developers, :id, :name) %>
-  </div>
-  <br>
-
-  <div>
-    <%= form.submit "Create Project" %>
-  </div>
-
-<% end %>

@@ -1,74 +1,92 @@
-<h1>Create Bug</h1>
-
-<% if @projects.empty? %>
-  <p>You have no assigned projects to file a bug for.</p>
-<% else %>
-  <%= form_with model: @bug,
-      url: project_bugs_path(@projects.first),
-      local: true,
-      html: { id: "new-bug-form", multipart: true } do |form| %>
-
+<div class="page-container">
+  <div class="page-header">
     <div>
-      <%= form.label :project_id, "Project" %>
-      <%= form.collection_select :project_id,
-            @projects,
-            :id,
-            :name,
-            prompt: "Select a project",
-            onchange: "updateBugFormAction(this)" %>
+      <p class="page-label">Bugs</p>
+      <h1 class="page-title">Create New Bug</h1>
+      <p class="page-description">Choose a project and add the issue details below.</p>
     </div>
+    <%= link_to "Back to Bugs", bugs_path, class: "button button-secondary" %>
+  </div>
 
-    <div>
-      <%= form.label :title %>
-      <%= form.text_field :title %>
+  <% if @projects.empty? %>
+    <div class="info-card">
+      <p>You do not have any assigned projects yet. Please ask your manager to assign a project before creating a bug.</p>
     </div>
+  <% else %>
+    <div class="form-card">
+      <%= form_with model: @bug,
+          url: project_bugs_path(@projects.first),
+          local: true,
+          html: { id: "new-bug-form", multipart: true } do |form| %>
 
-    <div>
-      <%= form.label :description %>
-      <%= form.text_area :description %>
+        <div class="form-row">
+          <%= form.label :project_id, "Project", class: "field-label" %>
+          <%= form.collection_select :project_id,
+                @projects,
+                :id,
+                :name,
+                prompt: "Select a project",
+                onchange: "updateBugFormAction(this)",
+                class: "input-field" %>
+        </div>
+
+        <div class="form-row">
+          <%= form.label :title, class: "field-label" %>
+          <%= form.text_field :title, class: "input-field" %>
+        </div>
+
+        <div class="form-row">
+          <%= form.label :description, class: "field-label" %>
+          <%= form.text_area :description, class: "input-field", rows: 4 %>
+        </div>
+
+        <div class="form-row form-row-split">
+          <div>
+            <%= form.label :deadline, class: "field-label" %>
+            <%= form.date_field :deadline, class: "input-field" %>
+          </div>
+          <div>
+            <%= form.label :bug_type, class: "field-label" %>
+            <%= form.select :bug_type,
+                Bug.bug_types.keys.map { |type| [type.titleize, type] },
+                {},
+                class: "input-field" %>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <%= form.label :developer_id, "Developer", class: "field-label" %>
+          <%= form.collection_select(:developer_id,
+                @developers,
+                :id,
+                :name,
+                prompt: "Select developer",
+                class: "input-field") %>
+        </div>
+
+        <div class="form-row">
+          <%= form.label :screenshot, class: "field-label" %>
+          <%= form.file_field :screenshot, class: "input-field" %>
+        </div>
+
+        <%= form.hidden_field :status, value: "pending" %>
+
+        <div class="actions-row">
+          <%= form.submit "Create Bug", class: "button button-primary" %>
+        </div>
+      <% end %>
+
+      # <script>
+      #   function updateBugFormAction(select) {
+      #     var projectId = select.value;
+      #     var form = document.getElementById("new-bug-form");
+      #     if (!projectId) {
+      #       form.action = "<%= project_bugs_path(@projects.first) %>";
+      #     } else {
+      #       form.action = "/projects/" + projectId + "/bugs";
+      #     }
+      #   }
+      # </script>
     </div>
-
-    <div>
-      <%= form.label :deadline %>
-      <%= form.date_field :deadline %>
-    </div>
-
-    <div>
-      <%= form.label :bug_type %>
-      <%= form.select :bug_type,
-          Bug.bug_types.keys.map { |type| [type.titleize, type] } %>
-    </div>
-
-    <div>
-      <%= form.label :developer %>
-      <%= form.collection_select(
-            :developer_id,
-            @developers,
-            :id,
-            :name,
-            prompt: "Select developer"
-          ) %>
-    </div>
-
-    <div>
-      <%= form.label :screenshot %>
-      <%= form.file_field :screenshot %>
-    </div>
-
-    <%= form.hidden_field :status, value: "pending" %>
-
-    <%= form.submit "Create Bug" %>
   <% end %>
-
-  <script>
-    function updateBugFormAction(select) {
-      var projectId = select.value;
-      var form = document.getElementById("new-bug-form");
-      if (!projectId) {
-        form.action = "<%= project_bugs_path(@projects.first) %>";
-      } else {
-        form.action = "/projects/" + projectId + "/bugs";
-      }
-    }
-  </script>
-<% end %>
+</div>

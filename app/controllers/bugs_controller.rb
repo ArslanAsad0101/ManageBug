@@ -1,7 +1,7 @@
 class BugsController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_form_data, only: [:new, :create]
-  before_action :set_project, except: [:index, :new, :create]
+  before_action :load_form_data, only: [:new, :create, :edit, :update]
+  before_action :set_project, except: [:index, :new]
   before_action :set_bug, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -66,7 +66,7 @@ class BugsController < ApplicationController
 
   def load_form_data
     @projects = current_user.assigned_projects
-    @developers = User.developer
+    @developers = User.where(role: User.roles[:developer])
   end
 
   def set_project

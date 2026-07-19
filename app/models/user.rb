@@ -5,6 +5,8 @@ class User < ApplicationRecord
   has_many :assigned_projects, through: :project_users, source: :project
   has_many :reported_bugs, class_name: "Bug", foreign_key: :reporter_id, dependent: :destroy
   has_many :assigned_bugs, class_name: "Bug", foreign_key: :developer_id, dependent: :destroy
+    has_one_attached :avatar
+
 
   enum :role, {
     manager: 0,

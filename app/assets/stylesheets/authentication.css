@@ -173,3 +173,51 @@
     padding: 28px 24px;
   }
 }
+
+
+
+
+
+
+/* avatar */
+.profile-avatar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.avatar-picker {
+  cursor: pointer;
+  text-align: center;
+  position: relative;
+}
+.avatar-image,
+.avatar-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 999px;
+  object-fit: cover;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border: 1px solid #d1d5db;
+}
+.avatar-placeholder {
+  color: #475569;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.avatar-input {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.avatar-note {
+  font-size: 0.9rem;
+  color: #6b7280;
+  max-width: 220px;
+}

@@ -39,13 +39,12 @@
         <div class="form-row">
           <%= form.label :status, "Update Status", class: "field-label" %>
           <%= form.select :status,
-              ["pending", "in_progress", "resolved", "closed"],
+              Bug.status_options_for_type(@bug.bug_type),
               { selected: @bug.status },
               class: "input-field" %>
         </div>
 
       <% else %>
-        <!-- QA VIEW: All fields editable -->
         <div class="form-row">
           <%= form.label :title, class: "field-label" %>
           <%= form.text_field :title, class: "input-field", placeholder: "Bug title" %>
@@ -73,7 +72,7 @@
         <div class="form-row">
           <%= form.label :status, class: "field-label" %>
           <%= form.select :status,
-              ["pending", "in_progress", "resolved", "closed"],
+              Bug.status_options_for_type(@bug.bug_type),
               {},
               class: "input-field" %>
         </div>

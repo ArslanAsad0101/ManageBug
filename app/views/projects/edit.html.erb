@@ -32,6 +32,28 @@
         <% end %>
       </div>
 
+
+
+<% selected_user_ids = @project.project_users.pluck(:user_id) %>
+
+<h4>Select QA</h4>
+<% @qas.each do |qa| %>
+  <div>
+    <%= check_box_tag "project[qa_user_ids][]", qa.id, selected_user_ids.include?(qa.id), id: "project_qa_#{qa.id}" %>
+    <%= label_tag "project_qa_#{qa.id}", qa.name %>
+  </div>
+<% end %>
+
+<h4>Select Developers</h4>
+<% @developers.each do |developer| %>
+  <div>
+    <%= check_box_tag "project[developer_user_ids][]", developer.id, selected_user_ids.include?(developer.id), id: "project_developer_#{developer.id}" %>
+    <%= label_tag "project_developer_#{developer.id}", developer.name %>
+  </div>
+<% end %>
+
+
+
       <div class="actions-row">
         <%= form.submit "Update Project", class: "button button-primary" %>
         <%= link_to "Cancel", project_path(@project), class: "button button-secondary" %>

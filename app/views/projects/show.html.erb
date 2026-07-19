@@ -32,3 +32,55 @@
       edit_project_path(@project),
       class: "button button-primary" %>
 <% end %>
+
+<div class="project-bugs-section">
+  <div class="page-header">
+    <div>
+      <p class="page-label">Project Bugs</p>
+      <h2 class="page-title"><%= pluralize(@project.bugs.count, "Bug") %></h2>
+    </div>
+
+    <% if can? :create, Bug %>
+      <%= link_to "New Bug", new_bug_path, class: "button button-primary" %>
+    <% end %>
+
+
+    <% if can? :destroy, @project %>
+  <%= link_to "Delete", @project, method: :delete, data: { confirm: "Are you sure?" }, class: "button button-danger" %>
+<% end %>
+  </div>
+
+  <% if @project.bugs.any? %>
+    <div class="bugs-grid">
+      <% @project.bugs.each do |bug| %>
+        <%= link_to [@project, bug], class: "bug-card-link" do %>
+          <div class="bug-card">
+            <div class="bug-card-header">
+              <div>
+                <h3 class="bug-card-title"><%= bug.title %></h3>
+                <p class="bug-card-meta"><%= bug.bug_type.titleize %> • Assigned to <%= bug.developer.name %></p>
+              </div>
+              <span class="status-badge status-<%= bug.status %>"><%= bug.status_label %></span>
+            </div>
+
+            <p class="bug-card-text"><%= truncate(bug.description, length: 110) %></p>
+
+            <div class="bug-card-footer">
+              <span>Due <%= bug.deadline.present? ? bug.deadline.strftime("%b %d") : "—" %></span>
+              <span class="bug-card-tag"><%= bug.reporter.name %></span>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+
+    </div>
+  <% else %>
+    <div class="info-card">
+      <p>No bugs have been created for this project yet.</p>
+    </div>
+  <% end %>
+</div>
+
+
+
+

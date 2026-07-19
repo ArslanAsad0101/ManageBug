@@ -14,8 +14,8 @@
     </div>
   <% else %>
     <div class="form-card">
-      <%= form_with model: @bug,
-          url: project_bugs_path(@projects.first),
+            <%= form_with model: @bug,
+          url: bugs_path,
           local: true,
           html: { id: "new-bug-form", multipart: true } do |form| %>
 
@@ -26,7 +26,6 @@
                 :id,
                 :name,
                 prompt: "Select a project",
-                onchange: "updateBugFormAction(this)",
                 class: "input-field" %>
         </div>
 
@@ -76,17 +75,6 @@
         </div>
       <% end %>
 
-      # <script>
-      #   function updateBugFormAction(select) {
-      #     var projectId = select.value;
-      #     var form = document.getElementById("new-bug-form");
-      #     if (!projectId) {
-      #       form.action = "<%= project_bugs_path(@projects.first) %>";
-      #     } else {
-      #       form.action = "/projects/" + projectId + "/bugs";
-      #     }
-      #   }
-      # </script>
-    </div>
+
   <% end %>
 </div>

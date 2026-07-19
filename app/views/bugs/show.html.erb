@@ -1,7 +1,7 @@
 <h1><%= @bug.title %></h1>
 <p>Project: <%= @bug.project.name %></p>
-<p>Status: <%= @bug.status %></p>
-<p>Type: <%= @bug.bug_type %></p>
+<p>Status: <%= @bug.status_label %></p>
+<p>Type: <%= @bug.bug_type.titleize %></p>
 <p>Developer: <%= @bug.developer.name %></p>
 <p>Reporter: <%= @bug.reporter.name %></p>
 <p><%= @bug.description %></p>
@@ -13,5 +13,5 @@
 <% end %>
 
 <% if can? :destroy, @bug %>
-  <%= link_to "Delete", project_bug_path(@project, @bug), method: :delete, data: { confirm: "Are you sure?" }, class: "button button-danger" %>
+  <%= link_to "Delete", [@project, @bug], method: :delete, data: { confirm: "Are you sure?" }, class: "button button-danger" %>
 <% end %>

@@ -1,15 +1,10 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
+  before_action :load_form_data, only: [:new, :create, :edit, :update]
   load_and_authorize_resource
 
 def index
-  @projects = if current_user.manager?
-    # Manager sees only their own projects
-    Project.where(manager_id: current_user.id)
-  else
-    # Developer and QA see projects they are assigned to
-    current_user.assigned_projects
-  end
+  @projects = Project.accessible_by(current_ability)
 
   if params[:search].present?
     @projects = @projects.where("name LIKE ?", "%#{params[:search]}%")
@@ -19,15 +14,16 @@ end
 
 
 def new
-  @qas = User.qa
-  @developers = User.developer
+  authorize! :create, Project
+  # @qas = User.qa
+  # @developers = User.developer
 end
 
   def create
   @project = current_user.projects.build(project_params)
 
   if @project.save
-    user_ids = (params[:project][:qa_user_ids] || []) + (params[:project][:developer_user_ids] || [])
+    user_ids = (params[:project][:qa_user_ids]) + (params[:project][:developer_user_ids])
 
     user_ids.each do |user_id|
       @project.project_users.create(user_id: user_id)
@@ -48,21 +44,38 @@ end
 
 
 def edit
-  @qas = User.qa
-  @developers = User.developer
+  authorize! :update, @project
+  # @qas = User.qa
+  # @developers = User.developer
 end
 def update
+  user_ids = (params[:project][:qa_user_ids] || []) + (params[:project][:developer_user_ids] || [])
+
   if @project.update(project_params)
-    redirect_to project_path(@project), notice: "Project updated successfully."
-  else
-    render :edit
-  end 
+    @project.project_users.destroy_all
+    user_ids.each do |user_id|
+      @project.project_users.create(user_id: user_id)
+    end
+
+    redirect_to @project, notice: "Project updated successfully."
+  end
 end
+
+
+def destroy
+  authorize! :destroy, @project
+  @project.destroy
+  redirect_to projects_path, notice: "Project deleted successfully."
+end
+
   private
 
   def project_params
   params.require(:project).permit(:name, :description, :image)
 end
 
-  
+def load_form_data
+  @qas = User.qa
+  @developers = User.developer 
+end
 end

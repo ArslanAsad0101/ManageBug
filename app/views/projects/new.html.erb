@@ -24,19 +24,21 @@
         <%= form.text_area :description, class: "input-field", rows: 4 %>
       </div>
 
-      <div class="form-row">
-        <%= label_tag "project[qa_user_ids][]", "Select QA", class: "field-label" %>
-        <%= select_tag "project[qa_user_ids][]",
-              options_from_collection_for_select(@qas, :id, :name),
-              class: "input-field" %>
-      </div>
+<% @qas.each do |qa| %>
+  <div>
+    <%= check_box_tag "project[qa_user_ids][]", qa.id %>
+    <%= label_tag "project_qa_#{qa.id}", qa.name %>
+  </div>
+<% end %>
 
-      <div class="form-row">
-        <%= label_tag "project[developer_user_ids][]", "Select Developers", class: "field-label" %>
-        <%= select_tag "project[developer_user_ids][]",
-              options_from_collection_for_select(@developers, :id, :name),
-              class: "input-field" %>
-      </div>
+<h4>Select Developers</h4>
+
+<% @developers.each do |developer| %>
+  <div>
+    <%= check_box_tag "project[developer_user_ids][]", developer.id %>
+    <%= label_tag "project_developer_#{developer.id}", developer.name %>
+  </div>
+<% end %>
 
       <div class="actions-row">
         <%= form.submit "Create Project", class: "button button-primary" %>

@@ -18,29 +18,34 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+    <%# Load auth-only styles on role selection, login, and signup pages %>
+    <% if controller_path == 'home' || controller_path == 'devise/sessions' || controller_path == 'devise/registrations' %>
+      <%= stylesheet_link_tag "authentication", "data-turbo-track": "reload" %>
+    <% end %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="<%= content_for?(:body_class) ? yield(:body_class) : '' %>">
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
 
     <% if user_signed_in? %>
       <nav class="topbar">
         <div class="topbar-left">
-          <h1>ManageBug</h1>
+          <div class="topbar-brand">ManageBug</div>
         </div>
 
         <div class="topbar-center">
           <%= link_to "Projects", projects_path, class: "topbar-link" %>
-<%= link_to "Bug", bugs_path, class: "topbar-link" %>
+          <%= link_to "Bug", bugs_path, class: "topbar-link" %>
         </div>
 
         <div class="topbar-right">
           <%= link_to edit_user_registration_path, class: "topbar-button" do %>
-            <%= current_user.name %>
+            <span class="topbar-avatar"><%= current_user.name.first.upcase %></span>
+            <span class="topbar-button-label">Dev.</span>
           <% end %>
           <%= link_to "Logout", destroy_user_session_path,
                 method: :delete,

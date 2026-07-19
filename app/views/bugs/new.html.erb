@@ -14,7 +14,17 @@
     </div>
   <% else %>
     <div class="form-card">
-            <%= form_with model: @bug,
+      <!-- Simple server-side project picker: choose a project and click "Load Developers"
+           to reload this page with developers for that project. No JavaScript required. -->
+      <%= form_with url: new_bug_path, method: :get, local: true do |picker| %>
+        <div class="form-row">
+          <%= picker.label :project_id, "Project", class: "field-label" %>
+          <%= picker.collection_select :project_id, @projects, :id, :name, { prompt: "Select a project" }, { class: "input-field" } %>
+          <%= picker.submit "Load Developers", class: "button button-secondary" %>
+        </div>
+      <% end %>
+
+      <%= form_with model: @bug,
           url: bugs_path,
           local: true,
           html: { id: "new-bug-form", multipart: true } do |form| %>
@@ -22,11 +32,11 @@
         <div class="form-row">
           <%= form.label :project_id, "Project", class: "field-label" %>
           <%= form.collection_select :project_id,
-                @projects,
-                :id,
-                :name,
-                prompt: "Select a project",
-                class: "input-field" %>
+          @projects,
+          :id,
+          :name,
+          { prompt: "Select a project" },
+          { class: "input-field" } %>
         </div>
 
         <div class="form-row">
@@ -59,8 +69,11 @@
                 @developers,
                 :id,
                 :name,
-                prompt: "Select developer",
-                class: "input-field") %>
+                { prompt: "Select developer" },
+                { class: "input-field", disabled: @developers.empty? }) %>
+          <% if @developers.empty? %>
+            <p class="field-hint">Select a project and click "Load Developers" to choose a developer.</p>
+          <% end %>
         </div>
 
         <div class="form-row">

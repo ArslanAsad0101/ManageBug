@@ -11,7 +11,9 @@ class BugsController < ApplicationController
   def new
     authorize! :create, Bug
     @bug = Bug.new
+    @bug.project_id = params[:project_id] if params[:project_id].present?
   end
+
 
   def create
     authorize! :create, Bug
@@ -66,7 +68,18 @@ class BugsController < ApplicationController
 
   def load_form_data
     @projects = current_user.assigned_projects
-    @developers = User.where(role: User.roles[:developer])
+
+    # If a project_id is present (from the query params when the user picks a project
+    # and clicks "Load Developers"), limit the developer list to those assigned to
+    # that project. Otherwise keep the developer list empty so the select remains
+    # disabled until a project is chosen.
+    if params[:project_id].present?
+      @developers = User.joins(:project_users)
+                        .where(project_users: { project_id: params[:project_id] }, role: User.roles[:developer])
+                        .distinct
+    else
+      @developers = []
+    end
   end
 
   def set_project

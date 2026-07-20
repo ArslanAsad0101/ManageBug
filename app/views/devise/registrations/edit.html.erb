@@ -1,13 +1,13 @@
-<div class="page-container">
+<div class="page-container profile-settings-page">
   <div class="page-header">
     <div>
-      <p class="page-label">Profile</p>
+      <p class="page-label">Profile Settings</p>
       <h1 class="page-title">Edit your profile</h1>
       <p class="page-description">Update your contact details and password.</p>
     </div>
   </div>
 
-  <div class="form-card profile-card">
+  <div class="form-card profile-card profile-settings-card">
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, multipart: true }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
@@ -16,14 +16,17 @@
           <%= f.file_field :avatar, id: "user_avatar", accept: "image/png,image/jpeg", class: "avatar-input" %>
           <label for="user_avatar" class="avatar-picker">
             <% if resource.avatar.attached? && resource.avatar.blob.persisted? %>
-              <%= image_tag resource.avatar.variant(resize_to_fill: [120, 120]), alt: "Profile avatar", class: "avatar-image" %>
+              <%= image_tag resource.avatar.variant(resize_to_fill: [140, 140]), alt: "Profile avatar", class: "avatar-image" %>
             <% else %>
               <div class="avatar-placeholder">
                 <span>Add photo</span>
               </div>
             <% end %>
           </label>
-          <div class="avatar-note">Click the photo to upload or replace your avatar.</div>
+        </div>
+        <div class="avatar-meta">
+          <p class="profile-name"><%= resource.name.presence || resource.email %></p>
+          <p class="profile-handle">@<%= resource.email.to_s.split("@").first %></p>
         </div>
       </div>
 
@@ -60,8 +63,8 @@
       </div>
 
       <div class="actions-row">
-        <%= f.submit "Update", class: "button button-primary" %>
         <%= link_to "Cancel", projects_path, class: "button button-secondary" %>
+        <%= f.submit "Confirm", class: "button button-primary" %>
       </div>
     <% end %>
   </div>

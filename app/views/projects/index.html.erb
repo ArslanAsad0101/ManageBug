@@ -1,34 +1,36 @@
 <div class="page-container">
   <div class="page-header">
     <div>
-      <p class="page-label">Projects</p>
-      <h1 class="page-title">Manage your projects</h1>
+      <h1 class="page-title">Visnext Software Solutions</h1>
+      <p class="page-label">Hi DeVisnext, welcome to ManageBug</p>
+
     </div>
 
-    <% if can? :create, Project %>
-      <%= link_to "Add New Project", new_project_path, class: "button button-primary" %>
-    <% end %>
-  </div>
-
-  <div class="search-bar">
-    <%= form_with url: projects_path, method: :get, local: true do |form| %>
-      <div class="search-row">
+    <div class="header-right">
+      <%= form_with url: projects_path, method: :get, local: true, class: "search-bar" do |form| %>
         <%= form.search_field :search,
             value: params[:search],
-            placeholder: "Search projects",
-            class: "input-field" %>
-        <%= form.submit "Search", class: "button button-secondary" %>
-      </div>
-    <% end %>
+            placeholder: "Search for Projects here",
+            class: "search-input" %>
+      <% end %>
+
+      <% if can? :create, Project %>
+        <%= link_to "+ Add New Project", new_project_path, class: "button button-primary" %>
+      <% end %>
+    </div>
   </div>
 
   <div class="projects-grid">
     <% @projects.each do |project| %>
       <%= link_to project_path(project), class: "project-card-link" do %>
         <div class="project-card">
-          <div class="project-card-badge"><%= project.name.first.upcase %></div>
+          <% if project.image.attached? %>
+            <div class="project-card-image-wrapper">
+              <%= image_tag project.image, alt: project.name, class: "project-card-image" %>
+            </div>
+          <% end %>
           <h3><%= project.name %></h3>
-          <p><%= truncate(project.description, length: 100) %></p>
+          <p><%= truncate(project.description.to_s, length: 100) %></p>
         </div>
       <% end %>
     <% end %>

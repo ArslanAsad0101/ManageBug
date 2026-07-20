@@ -1,17 +1,21 @@
 class BugsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_form_data, only: [:new, :create, :edit, :update]
-  before_action :set_project, except: [:index, :new]
+  before_action :set_project, except: [:index, :new, :create]
   before_action :set_bug, only: [:show, :edit, :update, :destroy]
 
   def index
     @bugs = Bug.accessible_by(current_ability)
+
+     if params[:search].present?
+    @bugs = @bugs.where("title LIKE ?", "%#{params[:search]}%")
+  end
   end
 
   def new
     authorize! :create, Bug
-    @bug = Bug.new
-    @bug.project_id = params[:project_id] if params[:project_id].present?
+    @bug = Bug.new(bug_form_params)
+    @step = params[:step] == "select_developer" ? "select_developer" : "details"
   end
 
 
@@ -69,17 +73,15 @@ class BugsController < ApplicationController
   def load_form_data
     @projects = current_user.assigned_projects
 
-    # If a project_id is present (from the query params when the user picks a project
-    # and clicks "Load Developers"), limit the developer list to those assigned to
-    # that project. Otherwise keep the developer list empty so the select remains
-    # disabled until a project is chosen.
-    if params[:project_id].present?
-      @developers = User.joins(:project_users)
-                        .where(project_users: { project_id: params[:project_id] }, role: User.roles[:developer])
+    selected_project_id = params.dig(:bug, :project_id) || params[:project_id]
+
+    @developers = if selected_project_id.present?
+                    User.joins(:project_users)
+                        .where(project_users: { project_id: selected_project_id }, role: User.roles[:developer])
                         .distinct
-    else
-      @developers = []
-    end
+                  else
+                    []
+                  end
   end
 
   def set_project
@@ -88,6 +90,12 @@ class BugsController < ApplicationController
 
   def set_bug
     @bug = @project.bugs.find(params[:id])
+  end
+
+  def bug_form_params
+    return {} unless params[:bug].present?
+
+    params.require(:bug).permit(:project_id, :title, :description, :deadline, :bug_type, :status, :developer_id, :screenshot)
   end
 
   def bug_params

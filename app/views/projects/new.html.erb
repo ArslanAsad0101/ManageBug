@@ -7,42 +7,76 @@
     </div>
   </div>
 
-  <div class="form-card">
-    <%= form_with model: @project, local: true do |form| %>
-      <div class="form-row">
-        <%= form.label :image, class: "field-label" %>
-        <%= form.file_field :image, accept: "image/png,image/jpeg", class: "input-field" %>
-      </div>
+  <div class="project-form-grid">
+    <%= form_with model: @project, local: true, html: { multipart: true } do |form| %>
+      <div class="form-card project-form-main">
+        <div class="project-form-columns">
+          <div class="project-form-fields">
+            <div class="form-row">
+              <%= form.label :name, class: "field-label" %>
+              <%= form.text_field :name, class: "input-field" %>
+            </div>
 
-      <div class="form-row">
-        <%= form.label :name, class: "field-label" %>
-        <%= form.text_field :name, class: "input-field" %>
-      </div>
+            <div class="form-row">
+              <%= form.label :description, class: "field-label" %>
+              <%= form.text_area :description, class: "input-field", rows: 4 %>
+            </div>
 
-      <div class="form-row">
-        <%= form.label :description, class: "field-label" %>
-        <%= form.text_area :description, class: "input-field", rows: 4 %>
-      </div>
+            <div class="form-row">
+              <p class="field-label">Assign to QA</p>
+              <div class="multi-select">
+                <details class="multi-select" role="listbox">
+                  <summary class="multi-select-summary">Select QA</summary>
+                  <div class="multi-select-panel">
+                    <% @qas.each do |qa| %>
+                      <label class="checkbox-row">
+                        <%= check_box_tag "project[qa_user_ids][]", qa.id, false, multiple: true, id: nil %>
+                        <span><%= qa.name %></span>
+                      </label>
+                    <% end %>
+                  </div>
+                </details>
+              </div>
+            </div>
 
-<% @qas.each do |qa| %>
-  <div>
-    <%= check_box_tag "project[qa_user_ids][]", qa.id %>
-    <%= label_tag "project_qa_#{qa.id}", qa.name %>
-  </div>
-<% end %>
+            <div class="form-row">
+              <p class="field-label">Select Developers</p>
+              <div class="multi-select">
+                <details class="multi-select" role="listbox">
+                  <summary class="multi-select-summary">Select Developers</summary>
+                  <div class="multi-select-panel">
+                    <% @developers.each do |developer| %>
+                      <label class="checkbox-row">
+                        <%= check_box_tag "project[developer_user_ids][]", developer.id, false, multiple: true, id: nil %>
+                        <span><%= developer.name %></span>
+                      </label>
+                    <% end %>
+                  </div>
+                </details>
+              </div>
+            </div>
+          </div>
 
-<h4>Select Developers</h4>
+          <aside class="project-form-sidebar">
+            <div class="upload-card">
+              <% if @project.image.attached? %>
+                <%= image_tag @project.image, alt: @project.name.presence || "Project logo", class: "upload-preview" %>
+              <% else %>
+                <label for="project_image" class="upload-placeholder">
+                  <div class="upload-icon">+</div>
+                  <p class="upload-title">Upload logo</p>
+                  <p class="upload-hint">PNG, JPG</p>
+                </label>
+              <% end %>
+              <%= form.file_field :image, id: "project_image", accept: "image/png,image/jpeg,image/svg+xml", class: "upload-input" %>
+            </div>
+          </aside>
+        </div>
 
-<% @developers.each do |developer| %>
-  <div>
-    <%= check_box_tag "project[developer_user_ids][]", developer.id %>
-    <%= label_tag "project_developer_#{developer.id}", developer.name %>
-  </div>
-<% end %>
-
-      <div class="actions-row">
-        <%= form.submit "Create Project", class: "button button-primary" %>
-        <%= link_to "Cancel", projects_path, class: "button button-secondary" %>
+        <div class="actions-row">
+          <%= form.submit "Create Project", class: "button button-primary" %>
+          <%= link_to "Cancel", projects_path, class: "button button-secondary" %>
+        </div>
       </div>
     <% end %>
   </div>

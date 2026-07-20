@@ -1,7 +1,8 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_form_data, only: [:new, :create, :edit, :update]
-  load_and_authorize_resource
+  before_action :set_project, only: [:show, :edit, :update, :destroy]
+  # load_and_authorize_resource
 
 def index
   @projects = Project.accessible_by(current_ability)
@@ -69,6 +70,10 @@ def destroy
 end
 
   private
+
+  def set_project
+    @project = Project.find(params[:id])
+  end
 
   def project_params
   params.require(:project).permit(:name, :description, :image)

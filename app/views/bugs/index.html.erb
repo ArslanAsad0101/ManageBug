@@ -14,12 +14,27 @@
       </p>
     </div>
 
-    <% if can? :create, Bug %>
-      <%= link_to "Add New Bug", new_bug_path, class: "button button-primary" %>
-    <% end %>
+    <div class="header-right">
+      <%= form_with url: bugs_path, method: :get, local: true, class: "search-bar" do |form| %>
+        <%= form.search_field :search,
+            value: params[:search],
+            placeholder: "Search for Bugs here",
+            class: "search-input" %>
+      <% end %>
+
+      <% if can? :create, Bug %>
+        <%= link_to "+ Add New Bug", new_bug_path, class: "button button-primary" %>
+      <% end %>
+    </div>
   </div>
 
-  <div class="table-card">
+        <div class="view-toggle" style="display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-bottom:12px;">
+          <button id="list-view-btn" class="button" title="List view" aria-pressed="true">☰</button>
+          <button id="grid-view-btn" class="button" title="Grid view" aria-pressed="false">▦</button>
+        </div>
+
+
+  <div id="bugs-table-view" class="table-card">
     <table class="table-list">
       <thead>
         <tr>
@@ -45,4 +60,52 @@
       </tbody>
     </table>
   </div>
+  <div id="bugs-grid-view" style="display:none;margin-top:16px;">
+    <%= render partial: 'grid', locals: { bugs: @bugs } %>
+  </div>
+
+  <script>
+    (function(){
+      var searchInput = document.getElementById('bug-search');
+      var listBtn = document.getElementById('list-view-btn');
+      var gridBtn = document.getElementById('grid-view-btn');
+      var tableView = document.getElementById('bugs-table-view');
+      var gridView = document.getElementById('bugs-grid-view');
+
+      function setView(view){
+        if(view==='grid'){
+          tableView.style.display='none';
+          gridView.style.display='block';
+          listBtn.setAttribute('aria-pressed', 'false');
+          gridBtn.setAttribute('aria-pressed', 'true');
+        } else {
+          tableView.style.display='block';
+          gridView.style.display='none';
+          listBtn.setAttribute('aria-pressed', 'true');
+          gridBtn.setAttribute('aria-pressed', 'false');
+        }
+      }
+
+      listBtn.addEventListener('click', function(){ setView('list'); });
+      gridBtn.addEventListener('click', function(){ setView('grid'); });
+
+      function textForBugRow(row){ return row.textContent || row.innerText || '' }
+      function textForBugCard(card){ return card.textContent || card.innerText || '' }
+
+      function filter(term){
+        var trs = document.querySelectorAll('#bugs-table-view tbody tr');
+        trs.forEach(function(tr){
+          var visible = textForBugRow(tr).toLowerCase().indexOf(term) !== -1;
+          tr.style.display = visible ? '' : 'none';
+        });
+        var cards = document.querySelectorAll('#bugs-grid-view .bug-card');
+        cards.forEach(function(card){
+          var visible = textForBugCard(card).toLowerCase().indexOf(term) !== -1;
+          card.style.display = visible ? '' : 'none';
+        });
+      }
+
+      searchInput.addEventListener('input', function(e){ filter(e.target.value.trim().toLowerCase()); });
+    })();
+  </script>
 </div>

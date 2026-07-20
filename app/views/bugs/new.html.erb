@@ -3,7 +3,7 @@
     <div>
       <p class="page-label">Bugs</p>
       <h1 class="page-title">Create New Bug</h1>
-      <p class="page-description">Choose a project and add the issue details below.</p>
+      <p class="page-description">Add the bug details first, then choose the developer for the selected project.</p>
     </div>
     <%= link_to "Back to Bugs", bugs_path, class: "button button-secondary" %>
   </div>
@@ -14,80 +14,89 @@
     </div>
   <% else %>
     <div class="form-card">
-      <!-- Simple server-side project picker: choose a project and click "Load Developers"
-           to reload this page with developers for that project. No JavaScript required. -->
-      <%= form_with url: new_bug_path, method: :get, local: true do |picker| %>
-        <div class="form-row">
-          <%= picker.label :project_id, "Project", class: "field-label" %>
-          <%= picker.collection_select :project_id, @projects, :id, :name, { prompt: "Select a project" }, { class: "input-field" } %>
-          <%= picker.submit "Load Developers", class: "button button-secondary" %>
-        </div>
-      <% end %>
+      <% if @step == "select_developer" %>
+        <h2 class="page-title" style="font-size: 1.25rem; margin-bottom: 1rem;">Step 2: Select a developer</h2>
 
-      <%= form_with model: @bug,
-          url: bugs_path,
-          local: true,
-          html: { id: "new-bug-form", multipart: true } do |form| %>
+        <%= form_with model: @bug,
+            url: bugs_path,
+            local: true,
+            html: { id: "new-bug-form", multipart: true } do |form| %>
 
-        <div class="form-row">
-          <%= form.label :project_id, "Project", class: "field-label" %>
-          <%= form.collection_select :project_id,
-          @projects,
-          :id,
-          :name,
-          { prompt: "Select a project" },
-          { class: "input-field" } %>
-        </div>
+          <%= form.hidden_field :project_id %>
+          <%= form.hidden_field :title %>
+          <%= form.hidden_field :description %>
+          <%= form.hidden_field :deadline %>
+          <%= form.hidden_field :bug_type %>
+          <%= form.hidden_field :status, value: "pending" %>
 
-        <div class="form-row">
-          <%= form.label :title, class: "field-label" %>
-          <%= form.text_field :title, class: "input-field" %>
-        </div>
-
-        <div class="form-row">
-          <%= form.label :description, class: "field-label" %>
-          <%= form.text_area :description, class: "input-field", rows: 4 %>
-        </div>
-
-        <div class="form-row form-row-split">
-          <div>
-            <%= form.label :deadline, class: "field-label" %>
-            <%= form.date_field :deadline, class: "input-field" %>
-          </div>
-          <div>
-            <%= form.label :bug_type, class: "field-label" %>
-            <%= form.select :bug_type,
-                Bug.bug_types.keys.map { |type| [type.titleize, type] },
-                {},
-                class: "input-field" %>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <%= form.label :developer_id, "Developer", class: "field-label" %>
-          <%= form.collection_select(:developer_id,
+          <div class="form-row">
+            <%= form.label :developer_id, "Developer", class: "field-label" %>
+            <%= form.collection_select :developer_id,
                 @developers,
                 :id,
                 :name,
                 { prompt: "Select developer" },
-                { class: "input-field", disabled: @developers.empty? }) %>
-          <% if @developers.empty? %>
-            <p class="field-hint">Select a project and click "Load Developers" to choose a developer.</p>
-          <% end %>
-        </div>
+                { class: "input-field" } %>
+          </div>
 
-        <div class="form-row">
-          <%= form.label :screenshot, class: "field-label" %>
-          <%= form.file_field :screenshot, class: "input-field" %>
-        </div>
+          <div class="actions-row">
+            <%= link_to "Back", new_bug_path, class: "button button-secondary" %>
+            <%= form.submit "Create Bug", class: "button button-primary" %>
+          </div>
+        <% end %>
+      <% else %>
+        <h2 class="page-title" style="font-size: 1.25rem; margin-bottom: 1rem;">Step 1: Bug details</h2>
 
-        <%= form.hidden_field :status, value: "pending" %>
+        <%= form_with model: @bug,
+            url: new_bug_path,
+            scope: :bug,
+            method: :get,
+            local: true,
+            html: { id: "bug-details-form" } do |form| %>
 
-        <div class="actions-row">
-          <%= form.submit "Create Bug", class: "button button-primary" %>
-        </div>
+          <%= hidden_field_tag :step, "select_developer" %>
+
+          <div class="form-row">
+            <%= form.label :project_id, "Project", class: "field-label" %>
+            <%= form.collection_select :project_id,
+                @projects,
+                :id,
+                :name,
+                { prompt: "Select a project" },
+                { class: "input-field" } %>
+          </div>
+
+          <div class="form-row">
+            <%= form.label :title, class: "field-label" %>
+            <%= form.text_field :title, class: "input-field" %>
+          </div>
+
+          <div class="form-row">
+            <%= form.label :description, class: "field-label" %>
+            <%= form.text_area :description, class: "input-field", rows: 4 %>
+          </div>
+
+          <div class="form-row form-row-split">
+            <div>
+              <%= form.label :deadline, class: "field-label" %>
+              <%= form.date_field :deadline, class: "input-field" %>
+            </div>
+            <div>
+              <%= form.label :bug_type, class: "field-label" %>
+              <%= form.select :bug_type,
+                  Bug.bug_types.keys.map { |type| [type.titleize, type] },
+                  {},
+                  class: "input-field" %>
+            </div>
+          </div>
+
+          <%= form.hidden_field :status, value: "pending" %>
+
+          <div class="actions-row">
+            <%= form.submit "Next", class: "button button-primary" %>
+          </div>
+        <% end %>
       <% end %>
-
-
+    </div>
   <% end %>
 </div>

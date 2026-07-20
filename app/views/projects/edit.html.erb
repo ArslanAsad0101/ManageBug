@@ -6,59 +6,78 @@
     <%= link_to "Back to Projects", projects_path, class: "button button-secondary" %>
   </div>
 
-  <div class="form-card">
-    <%= form_with model: @project,
-        url: project_path(@project),
-        local: true,
-        html: { id: "edit-project-form", multipart: true } do |form| %>
+  <div class="project-form-grid">
+    <%= form_with model: @project, local: true, html: { multipart: true } do |form| %>
+      <div class="form-card project-form-main">
+        <div class="project-form-columns">
+          <div class="project-form-fields">
+            <div class="form-row">
+              <%= form.label :name, class: "field-label" %>
+              <%= form.text_field :name, class: "input-field", placeholder: "Project name" %>
+            </div>
 
-      <div class="form-row">
-        <%= form.label :name, class: "field-label" %>
-        <%= form.text_field :name, class: "input-field", placeholder: "Project name" %>
-      </div>
+            <div class="form-row">
+              <%= form.label :description, class: "field-label" %>
+              <%= form.text_area :description, class: "input-field", rows: 4, placeholder: "Project description" %>
+            </div>
 
-      <div class="form-row">
-        <%= form.label :description, class: "field-label" %>
-        <%= form.text_area :description, class: "input-field", rows: 5, placeholder: "Project description" %>
-      </div>
+            <% selected_user_ids = @project.project_users.pluck(:user_id) %>
 
-      <div class="form-row">
-        <%= form.label :image, "Project Image", class: "field-label" %>
-        <%= form.file_field :image, class: "input-field", accept: "image/*" %>
-        <% if @project.image.attached? %>
-          <div class="image-preview">
-            <%= image_tag @project.image, alt: @project.name, style: "max-width: 200px; margin-top: 10px;" %>
+            <div class="form-row">
+              <p class="field-label">Assign to QA</p>
+              <div class="multi-select">
+                <details class="multi-select" role="listbox">
+                  <summary class="multi-select-summary">Select QA</summary>
+                  <div class="multi-select-panel">
+                    <% @qas.each do |qa| %>
+                      <label class="checkbox-row">
+                        <%= check_box_tag "project[qa_user_ids][]", qa.id, selected_user_ids.include?(qa.id), multiple: true, id: nil %>
+                        <span><%= qa.name %></span>
+                      </label>
+                    <% end %>
+                  </div>
+                </details>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <p class="field-label">Select Developers</p>
+              <div class="multi-select">
+                <details class="multi-select" role="listbox">
+                  <summary class="multi-select-summary">Select Developers</summary>
+                  <div class="multi-select-panel">
+                    <% @developers.each do |developer| %>
+                      <label class="checkbox-row">
+                        <%= check_box_tag "project[developer_user_ids][]", developer.id, selected_user_ids.include?(developer.id), multiple: true, id: nil %>
+                        <span><%= developer.name %></span>
+                      </label>
+                    <% end %>
+                  </div>
+                </details>
+              </div>
+            </div>
           </div>
-        <% end %>
-      </div>
 
+          <aside class="project-form-sidebar">
+            <div class="upload-card">
+              <% if @project.image.attached? %>
+                <%= image_tag @project.image, alt: @project.name, class: "upload-preview" %>
+              <% else %>
+                <label for="project_image" class="upload-placeholder">
+                  <div class="upload-icon">+</div>
+                  <p class="upload-title">Upload logo</p>
+                  <p class="upload-hint">PNG, JPG</p>
+                </label>
+              <% end %>
+              <%= form.file_field :image, id: "project_image", accept: "image/png,image/jpeg,image/svg+xml", class: "upload-input" %>
+            </div>
+          </aside>
+        </div>
 
-
-<% selected_user_ids = @project.project_users.pluck(:user_id) %>
-
-<h4>Select QA</h4>
-<% @qas.each do |qa| %>
-  <div>
-    <%= check_box_tag "project[qa_user_ids][]", qa.id, selected_user_ids.include?(qa.id), id: "project_qa_#{qa.id}" %>
-    <%= label_tag "project_qa_#{qa.id}", qa.name %>
-  </div>
-<% end %>
-
-<h4>Select Developers</h4>
-<% @developers.each do |developer| %>
-  <div>
-    <%= check_box_tag "project[developer_user_ids][]", developer.id, selected_user_ids.include?(developer.id), id: "project_developer_#{developer.id}" %>
-    <%= label_tag "project_developer_#{developer.id}", developer.name %>
-  </div>
-<% end %>
-
-
-
-      <div class="actions-row">
-        <%= form.submit "Update Project", class: "button button-primary" %>
-        <%= link_to "Cancel", project_path(@project), class: "button button-secondary" %>
-      </div>
-
+        <div class="actions-row">
+          <%= form.submit "Update Project", class: "button button-primary" %>
+          <%= link_to "Cancel", project_path(@project), class: "button button-secondary" %>
+        </div>
     <% end %>
   </div>
 </div>

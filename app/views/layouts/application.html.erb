@@ -42,15 +42,22 @@
           <%= link_to "Bug", bugs_path, class: "topbar-link" %>
         </div>
 
+        <div class="cover-topbar-right">
+          
+
         <div class="topbar-right">
           <%= link_to edit_user_registration_path, class: "topbar-button" do %>
-            <span class="topbar-avatar"><%= current_user.name.first.upcase %></span>
-            <span class="topbar-button-label">Dev.</span>
+            <span class="topbar-avatar"><%= current_user.name %></span>
           <% end %>
+         
+        </div>
+        <div class="topbar-right">
+          
           <%= link_to "Logout", destroy_user_session_path,
                 method: :delete,
                 data: { turbo_method: :delete },
                 class: "topbar-link logout-link" %>
+        </div>
         </div>
       </nav>
     <% end %>

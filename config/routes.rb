@@ -6,5 +6,5 @@ Rails.application.routes.draw do
   resources :projects do
     resources :bugs, only: [:create, :show, :edit, :update, :destroy]
   end
-  resources :bugs, only: [:index, :new]
+  resources :bugs, only: [:index, :new, :create]
 end

@@ -11,7 +11,7 @@
     <div class="project-detail-grid">
       <div class="project-detail-main">
         <div class="project-detail-section">
-          <p class="section-label">Description</p>
+          <p class="section-label">About this project</p>
           <p class="section-text"><%= @project.description.present? ? @project.description : "No description provided." %></p>
         </div>
       </div>
@@ -22,18 +22,22 @@
         </div>
       <% end %>
     </div>
+
+    <div class="project-detail-card-footer">
+      <div class="project-detail-actions">
+        <% if can? :update, @project %>
+          <%= link_to "Edit", edit_project_path(@project), class: "button button-primary" %>
+        <% end %>
+        <% if can? :destroy, @project %>
+          <%= link_to "Delete", @project, method: :delete, data: { confirm: "Are you sure?" }, class: "button button-danger" %>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
 
-
-
-<% if can? :update, @project %>
-  <%= link_to "Edit",
-      edit_project_path(@project),
-      class: "button button-primary" %>
-<% end %>
-
 <div class="project-bugs-section">
+  <div class="project-bugs-inner">
   <div class="page-header">
     <div>
       <p class="page-label">Project Bugs</p>
@@ -43,11 +47,6 @@
     <% if can? :create, Bug %>
       <%= link_to "New Bug", new_bug_path, class: "button button-primary" %>
     <% end %>
-
-
-    <% if can? :destroy, @project %>
-  <%= link_to "Delete", @project, method: :delete, data: { confirm: "Are you sure?" }, class: "button button-danger" %>
-<% end %>
   </div>
 
   <% if @project.bugs.any? %>
@@ -74,11 +73,13 @@
       <% end %>
 
     </div>
+
   <% else %>
     <div class="info-card">
       <p>No bugs have been created for this project yet.</p>
     </div>
   <% end %>
+  </div>
 </div>
 
 

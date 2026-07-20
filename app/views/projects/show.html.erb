@@ -29,7 +29,7 @@
           <%= link_to "Edit", edit_project_path(@project), class: "button button-primary" %>
         <% end %>
         <% if can? :destroy, @project %>
-          <%= link_to "Delete", @project, method: :delete, data: { confirm: "Are you sure?" }, class: "button button-danger" %>
+          <%= link_to "Delete", @project, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "button button-danger" %>
         <% end %>
       </div>
     </div>

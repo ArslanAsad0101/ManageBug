@@ -64,8 +64,12 @@ class BugsController < ApplicationController
 
   def destroy
     authorize! :destroy, @bug
-    @bug.destroy
-    redirect_to [@project, @bug], notice: "Bug deleted successfully."
+
+    if @bug.destroy
+      redirect_to project_path(@project), notice: "Bug deleted successfully."
+    else
+      redirect_to project_bug_path(@project, @bug), alert: "Unable to delete this bug."
+    end
   end
 
   private

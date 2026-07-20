@@ -64,7 +64,7 @@
         <% end %>
         
         <% if can? :destroy, @bug %>
-          <%= link_to "Delete Bug", [@project, @bug], method: :delete, data: { confirm: "Are you sure?" }, class: "button button-danger", style: "text-align: center; display: block; margin: 0; background: #dc2626; color: #fff;" %>
+          <%= link_to "Delete Bug", [@project, @bug], data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "button button-danger", style: "text-align: center; display: block; margin: 0; background: #dc2626; color: #fff;" %>
         <% end %>
         
         <%= link_to "← Back to Bugs", bugs_path, class: "button button-secondary", style: "text-align: center; display: block; margin: 0;" %>

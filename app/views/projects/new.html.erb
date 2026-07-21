@@ -46,39 +46,43 @@
 
             <div class="form-row">
               <p class="field-label">Assign to QA</p>
-              <div class="multi-select">
+              <div class="multi-select" data-preview-role="qa">
                 <details class="multi-select" role="listbox">
-
-
-                  <summary class="multi-select-summary">Select QA 
-                  </summary>
-          
+                  <summary class="multi-select-summary">Select QA</summary>
                   <div class="multi-select-panel">
                     <% @qas.each do |qa| %>
                       <label class="checkbox-row">
-                        <%= check_box_tag "project[qa_user_ids][]", qa.id, false, multiple: true, id: nil %>
+                        <%= check_box_tag "project[qa_user_ids][]", qa.id, false, multiple: true, id: nil, class: "selection-checkbox", data: { preview_role: "qa", preview_label: qa.name } %>
                         <span><%= qa.name %></span>
                       </label>
                     <% end %>
                   </div>
                 </details>
               </div>
+              <div class="selection-preview" data-preview-role="qa">
+                <span class="selection-preview-label">Selected QA</span>
+                <span class="selection-preview-values">None selected</span>
+              </div>
             </div>
 
             <div class="form-row">
               <p class="field-label">Select Developers</p>
-              <div class="multi-select">
+              <div class="multi-select" data-preview-role="developer">
                 <details class="multi-select" role="listbox">
                   <summary class="multi-select-summary">Select Developers</summary>
                   <div class="multi-select-panel">
                     <% @developers.each do |developer| %>
                       <label class="checkbox-row">
-                        <%= check_box_tag "project[developer_user_ids][]", developer.id, false, multiple: true, id: nil %>
+                        <%= check_box_tag "project[developer_user_ids][]", developer.id, false, multiple: true, id: nil, class: "selection-checkbox", data: { preview_role: "developer", preview_label: developer.name } %>
                         <span><%= developer.name %></span>
                       </label>
                     <% end %>
                   </div>
                 </details>
+              </div>
+              <div class="selection-preview" data-preview-role="developer">
+                <span class="selection-preview-label">Selected Developers</span>
+                <span class="selection-preview-values">None selected</span>
               </div>
             </div>
           </div>

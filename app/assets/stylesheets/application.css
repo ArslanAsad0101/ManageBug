@@ -1253,6 +1253,32 @@ body {
   max-width: 520px;
 }
 
+.selection-preview {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 520px;
+}
+
+.selection-preview-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.selection-preview-values {
+  font-size: 14px;
+  color: #0f172a;
+  word-break: break-word;
+}
+
 .multi-select details {
   position: relative;
 }

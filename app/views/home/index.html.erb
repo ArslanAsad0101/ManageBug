@@ -1,24 +1,19 @@
 
 <div class="auth-page">
   <div class="auth-panel auth-panel-dark">
-    <div class="auth-brand">
-      <div class="auth-logo">ManageBug</div>
-      <div class="auth-tag">Build better products</div>
-    </div>
-
     <div class="auth-preview">
       <div class="preview-box">
-        <!-- blank black section -->
+        <%= image_tag "Left.png", alt: "ManageBug preview", class: "preview-image" %>
       </div>
-    </div>
-
-    <div class="auth-footer">
-      <span>Already have an account?</span>
-      <%= link_to "Sign in", new_user_session_path, class: "auth-link" %>
     </div>
   </div>
 
   <div class="auth-panel auth-panel-light">
+    <div class="auth-panel-top-link">
+      <span>Already have an account?</span>
+      <%= link_to "Sign in", new_user_session_path, class: "auth-link" %>
+    </div>
+
     <div class="auth-heading">Join Us!</div>
     <p class="auth-text">
       To begin this journey, tell us what type of account you'd be opening.

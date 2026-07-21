@@ -15,19 +15,18 @@
   <% else %>
     <div class="form-card">
       <% if @step == "select_developer" %>
-        <h2 class="page-title" style="font-size: 1.25rem; margin-bottom: 1rem;">Step 2: Select a developer</h2>
+        <h2 class="page-title" style="font-size: 25px; margin-bottom: 20px;">Step 2: Select a developer</h2>
 
         <%= form_with model: @bug,
             url: bugs_path,
             local: true,
             html: { id: "new-bug-form", multipart: true } do |form| %>
 
-          <%= form.hidden_field :project_id %>
+          <%= form.hidden_field :project_id%>
           <%= form.hidden_field :title %>
           <%= form.hidden_field :description %>
           <%= form.hidden_field :deadline %>
           <%= form.hidden_field :bug_type %>
-          <%= form.hidden_field :status, value: "pending" %>
 
           <div class="form-row">
             <%= form.label :developer_id, "Developer", class: "field-label" %>
@@ -39,17 +38,32 @@
                 { class: "input-field" } %>
           </div>
 
+          <div class="form-row">
+            <%= form.label :screenshot, class: "field-label" %>
+            <div class="upload-card">
+              <label for="bug_screenshot" class="upload-target">
+                <div class="upload-placeholder">
+                  <div class="upload-icon">+</div>
+                  <p class="upload-title">Upload screenshot</p>
+                  <p class="upload-hint">PNG, JPG</p>
+                </div>
+              </label>
+              <%= form.file_field :screenshot, id: "bug_screenshot", class: "upload-input", accept: "image/*" %>
+            </div>
+          </div>
+
           <div class="actions-row">
             <%= link_to "Back", new_bug_path, class: "button button-secondary" %>
             <%= form.submit "Create Bug", class: "button button-primary" %>
           </div>
         <% end %>
       <% else %>
-        <h2 class="page-title" style="font-size: 1.25rem; margin-bottom: 1rem;">Step 1: Bug details</h2>
+        <h2 class="page-title" style="font-size: 25px; margin-bottom: 20px;">Step 1: Bug details</h2>
+
+
 
         <%= form_with model: @bug,
             url: new_bug_path,
-            scope: :bug,
             method: :get,
             local: true,
             html: { id: "bug-details-form" } do |form| %>
@@ -63,7 +77,12 @@
                 :id,
                 :name,
                 { prompt: "Select a project" },
-                { class: "input-field" } %>
+                { class: "input-field #{'input-field-error' if @bug.errors[:project_id].present?}" } %>
+            <% if @bug.errors[:project_id].present? %>
+              <div class="field-error-text">
+                <%= @bug.errors.full_messages_for(:project_id).first %>
+              </div>
+            <% end %>
           </div>
 
           <div class="form-row">
@@ -89,8 +108,6 @@
                   class: "input-field" %>
             </div>
           </div>
-
-          <%= form.hidden_field :status, value: "pending" %>
 
           <div class="actions-row">
             <%= form.submit "Next", class: "button button-primary" %>

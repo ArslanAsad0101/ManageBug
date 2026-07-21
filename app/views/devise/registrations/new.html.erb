@@ -1,22 +1,19 @@
 <!-- app/views/devise/registrations/new.html.erb -->
 <div class="auth-page">
   <div class="auth-panel auth-panel-dark">
-    <div class="auth-brand">
-      <div class="auth-logo">ManageBug</div>
-      <div class="auth-tag">Welcome on board</div>
-    </div>
-
     <div class="auth-preview">
-      <div class="preview-box"></div>
-    </div>
-
-    <div class="auth-footer">
-      <span>Already have an account?</span>
-      <%= link_to "Login to your account", new_user_session_path, class: "auth-link" %>
+      <div class="preview-box">
+        <%= image_tag "Left.png", alt: "ManageBug preview", class: "preview-image" %>
+      </div>
     </div>
   </div>
 
   <div class="auth-panel auth-panel-light">
+    <div class="auth-panel-top-link">
+      <span>Already have an account?</span>
+      <%= link_to "Login", new_user_session_path, class: "auth-link" %>
+    </div>
+
     <div class="auth-heading">Sign Up</div>
     <p class="auth-text">Please fill your information below</p>
 
@@ -32,7 +29,11 @@
 
       <div class="form-group">
         <%= f.label :phone_number, "Mobile number" %>
-        <%= f.telephone_field :phone_number, class: "form-control", autocomplete: "tel" %>
+        <%= f.telephone_field :phone_number, class: "form-control", autocomplete: "tel",
+      inputmode: "numeric",
+      pattern: "[0-9]*",
+      maxlength: 15,
+      placeholder: "Enter digits only" %>
       </div>
 
       <div class="form-group">

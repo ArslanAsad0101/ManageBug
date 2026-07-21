@@ -1,23 +1,20 @@
 <!-- app/views/devise/sessions/new.html.erb -->
 <div class="auth-page">
   <div class="auth-panel auth-panel-dark">
-    <div class="auth-brand">
-      <div class="auth-logo">ManageBug</div>
-      <div class="auth-tag">Back to your workspace</div>
-    </div>
-
     <div class="auth-preview">
-      <div class="preview-box"></div>
-    </div>
-
-    <div class="auth-footer">
-      <span>New to ManageBug?</span>
-      <%= link_to "Create an account", root_path, class: "auth-link" %>
+      <div class="preview-box">
+        <%= image_tag "Left.png", alt: "ManageBug preview", class: "preview-image" %>
+      </div>
     </div>
   </div>
 
   <div class="auth-panel auth-panel-light">
-    <div class="auth-heading">Sign Up</div>
+    <div class="auth-panel-top-link">
+      <span>Need an account?</span>
+      <%= link_to "Sign Up", new_user_registration_path, class: "auth-link" %>
+    </div>
+
+    <div class="auth-heading">Log In</div>
     <p class="auth-text">Please fill your information below</p>
 
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>

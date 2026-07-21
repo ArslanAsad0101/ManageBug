@@ -14,6 +14,24 @@
           <p class="section-label">About this project</p>
           <p class="section-text"><%= @project.description.present? ? @project.description : "No description provided." %></p>
         </div>
+
+        <div class="project-detail-section">
+          <p class="section-label">Selected users</p>
+          <% if @project.assigned_users.any? %>
+            <% @project.assigned_users.group_by(&:role).each do |role, users| %>
+              <div class="project-user-group">
+                <p class="project-user-role"><%= role.to_s.titleize %></p>
+                <ul class="project-user-list">
+                  <% users.each do |user| %>
+                    <li><strong><%= user.name %></strong> <span>(<%= user.email %>)</span></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="section-text">No users have been assigned to this project yet.</p>
+          <% end %>
+        </div>
       </div>
 
       <% if @project.image.attached? %>
@@ -38,47 +56,24 @@
 
 <div class="project-bugs-section">
   <div class="project-bugs-inner">
-  <div class="page-header">
-    <div>
-      <p class="page-label">Project Bugs</p>
-      <h2 class="page-title"><%= pluralize(@project.bugs.count, "Bug") %></h2>
-    </div>
+    <div class="page-header">
+      <div>
+        <p class="page-label">Project Bugs</p>
+        <h2 class="page-title"><%= pluralize(@project.bugs.count, "Bug") %></h2>
+      </div>
 
-    <% if can? :create, Bug %>
-      <%= link_to "New Bug", new_bug_path, class: "button button-primary" %>
-    <% end %>
-  </div>
-
-  <% if @project.bugs.any? %>
-    <div class="bugs-grid">
-      <% @project.bugs.each do |bug| %>
-        <%= link_to [@project, bug], class: "bug-card-link" do %>
-          <div class="bug-card">
-            <div class="bug-card-header">
-              <div>
-                <h3 class="bug-card-title"><%= bug.title %></h3>
-                <p class="bug-card-meta"><%= bug.bug_type.titleize %> • Assigned to <%= bug.developer.name %></p>
-              </div>
-              <span class="status-badge status-<%= bug.status %>"><%= bug.status_label %></span>
-            </div>
-
-            <p class="bug-card-text"><%= truncate(bug.description, length: 110) %></p>
-
-            <div class="bug-card-footer">
-              <span>Due <%= bug.deadline.present? ? bug.deadline.strftime("%b %d") : "—" %></span>
-              <span class="bug-card-tag"><%= bug.reporter.name %></span>
-            </div>
-          </div>
-        <% end %>
+      <% if can? :create, Bug %>
+        <%= link_to "New Bug", new_bug_path, class: "button button-primary" %>
       <% end %>
-
     </div>
 
-  <% else %>
-    <div class="info-card">
-      <p>No bugs have been created for this project yet.</p>
-    </div>
-  <% end %>
+    <% if @project.bugs.any? %>
+      <%= render "bugs/grid", bugs: @project.bugs %>
+    <% else %>
+      <div class="info-card">
+        <p>No bugs have been created for this project yet.</p>
+      </div>
+    <% end %>
   </div>
 </div>
 

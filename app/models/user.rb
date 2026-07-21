@@ -5,7 +5,7 @@ class User < ApplicationRecord
   has_many :assigned_projects, through: :project_users, source: :project
   has_many :reported_bugs, class_name: "Bug", foreign_key: :reporter_id, dependent: :destroy
   has_many :assigned_bugs, class_name: "Bug", foreign_key: :developer_id, dependent: :destroy
-    has_one_attached :avatar
+  has_one_attached :avatar
 
 
   enum :role, {
@@ -16,5 +16,7 @@ class User < ApplicationRecord
 
   validates :name, presence: true
   validates :role, presence: true
-  validates :phone_number, presence: true
+validates :phone_number,
+  presence: true,
+format: { with: /\A\+\d+\z/, message: "+92" }
 end

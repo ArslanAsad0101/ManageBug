@@ -10,7 +10,9 @@
  */
 
 
-/* Navbar */
+/* =========================
+   Navigation / top bar
+========================= */
 
 .topbar {
   display: flex;
@@ -81,9 +83,9 @@
 
 
 
-/* UI support styles */
-
-/* Flash notice */
+/* =========================
+   Flash messages
+========================= */
 .flash-message {
   margin: 16px auto 0;
   max-width: 1000px;
@@ -105,89 +107,17 @@
   border: 1px solid #fecaca;
 }
 
-
-
-
-
+/* Legacy duplicate page-shell block kept for reference.
 .page-container {
   max-width: 1300px;
   margin: 0 auto;
   padding: 32px 24px;
 }
+*/
 
-/* .page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding-top: 24px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid #ff0e0e;
-  background: red;
-} */
-
-/* .page-label {
-  font-size: 13px;
-  color: #9aa0a6;
-  margin: 0 0 4px;
-} */
-
-/* .topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.75rem 1rem;
-  background: #ffffff;
-  border-bottom: 1px solid #ddd;
-} */
-
-/* .topbar-left,
-.topbar-center,
-.topbar-right {
-  display: flex;
-  align-items: center;
-} */
-
-/* .topbar-left {
-  justify-content: flex-start;
-  gap: 0.5rem;
-} */
-
-/* .topbar-center {
-  justify-content: center;
-  gap: 1rem;
-} */
-
-/* .topbar-right {
-  justify-content: flex-end;
-} */
-
-/* .topbar-link {
-  color: #1f2937;
-  text-decoration: none;
-  font-weight: 600;
-} */
-
-/* .topbar-link:hover {
-  text-decoration: underline;
-} */
-/* 
-.topbar-link.disabled {
-  color: #9ca3af;
-  cursor: not-allowed;
-  pointer-events: none;
-} */
-
-/* .separator {
-  color: #6b7280;
-} */
-
-
-
-
-
-/* UI support styles */
+/* =========================
+   Shared page shell
+========================= */
 .page-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -451,7 +381,7 @@
 }
 
 .project-form-grid {
-  margin-top: 24px;
+  margin-top: 50px;
 }
 
 .project-form-main {
@@ -489,6 +419,17 @@
   border-radius: 20px;
   background: #f8fafc;
   position: relative;
+  overflow: hidden;
+}
+
+.upload-target {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  cursor: pointer;
 }
 
 .upload-placeholder {
@@ -532,9 +473,10 @@
 }
 
 .upload-preview {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  object-fit: cover;
   border-radius: 16px;
 }
 
@@ -1202,7 +1144,10 @@ body {
 } */
 
 
-/* Action Dropdown Styles - CSS Only */
+/* =========================
+   Legacy dropdown styles
+========================= */
+/*
 .action-dropdown {
   position: relative;
   display: inline-block;
@@ -1236,7 +1181,6 @@ body {
   overflow: hidden;
 }
 
-/* Show on hover */
 .action-dropdown:hover .dropdown-menu {
   display: block;
 }
@@ -1297,9 +1241,12 @@ body {
 
 .status-form {
   display: contents;
-  }
+}
+*/
 
-/* Native details-based multi-select dropdown (no JS) */
+/* =========================
+   Multi-select input
+========================= */
 .multi-select {
   position: relative;
   width: 100%;
@@ -1715,359 +1662,9 @@ body {
 
 
 /* =========================
-   Global
+   Legacy styles removed
+   The current app uses the earlier shared page and form styles above.
 ========================= */
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background: #fafafa;
-  font-family: "Poppins", sans-serif;
-  color: #202020;
-}
-
-/* =========================
-   Container
-========================= */
-
-.dashboard-container {
-  width: 88%;
-  margin: 35px auto;
-}
-
-/* =========================
-   Header
-========================= */
-
-.dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 35px;
-}
-
-.company {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-
-.company-border {
-  width: 4px;
-  height: 64px;
-  background: #4caf84;
-  border-radius: 10px;
-}
-
-.company h2 {
-  font-size: 26px;
-  font-weight: 700;
-  color: #1d1d1d;
-}
-
-.company p {
-  color: #999;
-  margin-top: 4px;
-  font-size: 15px;
-}
-
-/* =========================
-   Header Right
-========================= */
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-
-/* Search */
-
-.search-box {
-  width: 420px;
-  height: 52px;
-  background: white;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  padding: 0 18px;
-  box-shadow: 0 3px 15px rgba(0,0,0,.05);
-}
-
-.search-box input {
-  border: none;
-  outline: none;
-  width: 100%;
-  margin-left: 12px;
-  font-size: 15px;
-}
-
-.search-box svg {
-  color: #999;
-}
-
-/* Button */
-
-.add-btn {
-  height: 52px;
-  padding: 0 28px;
-  border: none;
-  border-radius: 10px;
-  background: #0d6efd;
-  color: white;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: .25s;
-}
-
-.add-btn:hover {
-  background: #0056d8;
-}
-
-/* =========================
-   Grid
-========================= */
-
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 35px;
-}
-
-/* =========================
-   Card
-========================= */
-
-.project-card {
-  background: white;
-  border-radius: 14px;
-  padding: 26px;
-  min-height: 220px;
-
-  box-shadow:
-      0 5px 25px rgba(0,0,0,.05);
-  transition: .25s;
-}
-
-.project-card:hover {
-  transform: translateY(-4px);
-  box-shadow:
-      0 12px 30px rgba(0,0,0,.08);
-}
-
-/* Icon */
-
-.project-icon {
-  width: 54px;
-  height: 54px;
-  border-radius: 10px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  margin-bottom: 22px;
-}
-
-.project-icon img,
-.project-icon i {
-  font-size: 24px;
-}
-
-/* Title */
-
-.project-title {
-  font-size: 21px;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-/* Description */
-
-.project-description {
-  color: #909090;
-  line-height: 1.7;
-  font-size: 15px;
-  margin-bottom: 24px;
-}
-
-/* Progress */
-
-.project-progress {
-  color: #555;
-  font-weight: 500;
-  font-size: 15px;
-}
-
-/* =========================
-   Colors
-========================= */
-
-.cyan {
-  background: #74d8de;
-}
-
-.green {
-  background: #d8fb66;
-}
-
-.pink {
-  background: #ffc0cb;
-}
-
-.purple {
-  background: #9999ff;
-}
-
-.orange {
-  background: #ffab57;
-}
-
-.blue {
-  background: #82bbff;
-}
-
-/* =========================
-   Responsive
-========================= */
-
-@media (max-width:1100px){
-
-    .projects-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .dashboard-header{
-        flex-direction:column;
-        gap:20px;
-        align-items:flex-start;
-    }
-
-}
-
-@media(max-width:700px){
-
-    .projects-grid{
-        grid-template-columns:1fr;
-    }
-
-    .header-actions{
-        flex-direction:column;
-        width:100%;
-    }
-
-    .search-box{
-        width:100%;
-    }
-
-    .add-btn{
-        width:100%;
-    }
-
-}
-
-
-/* Action Dropdown Styles - CSS Only */
-.action-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.action-menu-btn {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 5px 10px;
-  color: #666;
-  transition: color 0.2s;
-}
-
-.action-menu-btn:hover {
-  color: #333;
-}
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 30px;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  min-width: 180px;
-  overflow: hidden;
-}
-
-/* Show on hover */
-.action-dropdown:hover .dropdown-menu {
-  display: block;
-}
-
-.dropdown-header {
-  padding: 10px 16px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #666;
-  text-transform: uppercase;
-  border-bottom: 1px solid #eee;
-}
-
-.dropdown-item {
-  display: block;
-  width: 100%;
-  padding: 10px 16px;
-  border: none;
-  background: none;
-  text-align: left;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
-  text-decoration: none;
-  color: #333;
-}
-
-.dropdown-item:hover {
-  background-color: #f5f5f5;
-}
-
-.dropdown-item.status-pending {
-  color: #ff4757;
-}
-
-.dropdown-item.status-in_progress {
-  color: #2196F3;
-}
-
-.dropdown-item.status-resolved {
-  color: #4CAF50;
-}
-
-.dropdown-item.status-closed {
-  color: #00BCD4;
-}
-
-.dropdown-item.delete-item {
-  color: #ff4757;
-  font-weight: 500;
-}
-
-.dropdown-divider {
-  height: 1px;
-  background-color: #eee;
-  margin: 5px 0;
-}
-
-.status-form {
-  display: contents;
-  }
 
 
 

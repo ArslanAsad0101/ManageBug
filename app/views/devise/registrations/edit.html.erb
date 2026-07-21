@@ -13,13 +13,15 @@
 
       <div class="profile-avatar">
         <div class="avatar-card">
-          <%= f.file_field :avatar, id: "user_avatar", accept: "image/png,image/jpeg", class: "avatar-input" %>
           <label for="user_avatar" class="avatar-picker">
+                <% f.file_field :avatar, id: "user_avatar", accept: "image/png,image/jpeg", class: "avatar-input" %>
+
             <% if resource.avatar.attached? && resource.avatar.blob.persisted? %>
               <%= image_tag resource.avatar.variant(resize_to_fill: [140, 140]), alt: "Profile avatar", class: "avatar-image" %>
             <% else %>
               <div class="avatar-placeholder">
-                <span>Add photo</span>
+                <span>Add photo
+                </span>
               </div>
             <% end %>
           </label>

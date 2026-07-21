@@ -8,6 +8,28 @@
   </div>
 
   <div class="project-form-grid">
+
+
+<% if @project.errors[:description].present? %>
+    <div class="field-error-text">
+      <%= @project.errors.full_messages_for(:description).first %>
+    </div>
+  <% end %>
+
+
+  <% if @project.errors[:name].present? %>
+    <div class="field-error-text">
+      <%= @project.errors.full_messages_for(:name).first %>
+    </div>
+  <% end %>
+
+  <% if @project.errors[:image].present? %>
+    <div class="field-error-text">
+      <%= @project.errors.full_messages_for(:image).first %>
+    </div>
+  <% end %>
+
+
     <%= form_with model: @project, local: true, html: { multipart: true } do |form| %>
       <div class="form-card project-form-main">
         <div class="project-form-columns">
@@ -26,7 +48,11 @@
               <p class="field-label">Assign to QA</p>
               <div class="multi-select">
                 <details class="multi-select" role="listbox">
-                  <summary class="multi-select-summary">Select QA</summary>
+
+
+                  <summary class="multi-select-summary">Select QA 
+                  </summary>
+          
                   <div class="multi-select-panel">
                     <% @qas.each do |qa| %>
                       <label class="checkbox-row">
@@ -59,16 +85,18 @@
 
           <aside class="project-form-sidebar">
             <div class="upload-card">
-              <% if @project.image.attached? %>
-                <%= image_tag @project.image, alt: @project.name.presence || "Project logo", class: "upload-preview" %>
-              <% else %>
-                <label for="project_image" class="upload-placeholder">
-                  <div class="upload-icon">+</div>
-                  <p class="upload-title">Upload logo</p>
-                  <p class="upload-hint">PNG, JPG</p>
-                </label>
-              <% end %>
-              <%= form.file_field :image, id: "project_image", accept: "image/png,image/jpeg,image/svg+xml", class: "upload-input" %>
+              <label for="project_image" class="upload-target">
+                <% if @project.image.attached? %>
+                  <%= image_tag @project.image, alt: @project.name.presence || "Project logo", class: "upload-preview" %>
+                <% else %>
+                  <div class="upload-placeholder">
+                    <div class="upload-icon">+</div>
+                    <p class="upload-title">Upload logo</p>
+                    <p class="upload-hint">PNG, JPG</p>
+                  </div>
+                <% end %>
+              </label>
+              <%= form.file_field :image, id: "project_image", accept: "image/png,image/jpeg,image", class: "upload-input" %>
             </div>
           </aside>
         </div>

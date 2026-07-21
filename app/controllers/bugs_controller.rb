@@ -1,15 +1,16 @@
 class BugsController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_form_data, only: [:new, :create, :edit, :update]
+  before_action :load_data, only: [:new, :create, :edit, :update]
   before_action :set_project, except: [:index, :new, :create]
   before_action :set_bug, only: [:show, :edit, :update, :destroy]
 
   def index
     @bugs = Bug.accessible_by(current_ability)
+    @view = params[:view] || "list"
 
-     if params[:search].present?
-    @bugs = @bugs.where("title LIKE ?", "%#{params[:search]}%")
-  end
+    if params[:search].present?
+      @bugs = @bugs.where("title LIKE ?", "%#{params[:search]}%")
+    end
   end
 
   def new
@@ -25,13 +26,13 @@ class BugsController < ApplicationController
     @project = current_user.assigned_projects.find_by(id: bug_params[:project_id])
 
     unless @project
-      @bug = Bug.new(bug_params)
+      @bug = Bug.new(bug_form_params)
       @bug.errors.add(:project_id, "must be selected")
       render :new, status: :unprocessable_entity
       return
     end
 
-    @bug = @project.bugs.build(bug_params)
+    @bug = @project.bugs.build(bug_form_params)
     @bug.reporter = current_user
 
     if @bug.save
@@ -42,6 +43,7 @@ class BugsController < ApplicationController
   end
 
   def show
+    authorize! :read, @bug
   end
 
   def edit
@@ -52,6 +54,7 @@ class BugsController < ApplicationController
   end
 
   def update
+    authorize! :update, @bug
 
     if @bug.update(bug_params)
       redirect_to [@project, @bug], notice: "Bug updated successfully."
@@ -74,18 +77,16 @@ class BugsController < ApplicationController
 
   private
 
-  def load_form_data
+  def load_data
     @projects = current_user.assigned_projects
 
     selected_project_id = params.dig(:bug, :project_id) || params[:project_id]
 
     @developers = if selected_project_id.present?
-                    User.joins(:project_users)
-                        .where(project_users: { project_id: selected_project_id }, role: User.roles[:developer])
-                        .distinct
-                  else
-                    []
-                  end
+                   Project.find_by(id: selected_project_id)&.assigned_users&.developer
+                 else
+                   []
+                 end
   end
 
   def set_project

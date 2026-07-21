@@ -1,0 +1,46 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-lg border-0">
+        <div class="card-body text-center p-5">
+  
+          <!-- Error Icon -->
+          <div class="mb-4">
+            <i class="fas fa-exclamation-triangle text-warning" style="font-size: 4rem;"></i>
+          </div>
+
+          <!-- Error Code -->
+          <h1 class="card-title mb-2">
+            <span class="badge bg-warning text-dark"><%= @error_code %></span>
+          </h1>
+
+          <!-- Error Message -->
+          <p class="card-text text-muted fs-5 mb-4">
+            <%= @error_message %>
+          </p>
+
+
+          <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="javascript:history.back()" class="btn btn-outline-secondary btn-lg px-4 gap-3">
+              <i class="fas fa-arrow-left"></i> Go Back
+            </a>
+            <a href="<%= projects_path %>" class="btn btn-primary btn-lg px-4">
+              <i class="fas fa-home"></i> Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+
+     
+    </div>
+  </div>
+</div>
+
+<style>
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+</style>

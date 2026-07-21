@@ -1,7 +1,12 @@
+/* =========================
+   Authentication screens
+========================= */
 /* app/assets/stylesheets/auth.css */
 .auth-page {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   display: grid;
+  width: 100%;
   grid-template-columns: minmax(320px, 1.05fr) minmax(320px, 0.95fr);
   gap: 0;
   background: #e9f0ff;
@@ -18,15 +23,16 @@
 }
 
 .auth-panel-dark {
-  background: linear-gradient(180deg, #132548 0%, #0f1e3a 100%);
+  padding: 0;
+  background: none;
   color: #eef4ff;
 }
 
 .auth-panel-light {
   background: #f7f9ff;
   color: #0f172a;
-  box-shadow: 0 40px 90px rgba(15, 36, 70, 0.1);
-  border-radius: 0 40px 40px 0;
+  overflow-y: auto;
+  position: relative;
 }
 
 .auth-brand {
@@ -50,22 +56,32 @@
 .auth-preview {
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 18px 0;
+  align-items: stretch;
+  justify-content: stretch;
+  min-height: 100vh;
 }
 
 .preview-box {
   width: 100%;
-  max-width: 520px;
-  min-height: 380px;
-  border-radius: 34px;
-  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.2), transparent 32%), linear-gradient(180deg, #3153ff 0%, #10264c 100%);
-  box-shadow: 0 38px 70px rgba(15, 36, 70, 0.16);
+  height: 100%;
+  max-width: none;
+  min-height: auto;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
   position: relative;
   overflow: hidden;
 }
 
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* preview overlay decorations removed for full-image layout */
+/*
 .preview-box::before {
   content: "";
   position: absolute;
@@ -87,11 +103,33 @@
   background: rgba(255, 255, 255, 0.12);
   border-radius: 50%;
 }
+*/
 
 .auth-footer {
   margin-top: 44px;
   font-size: 15px;
   color: rgba(238, 244, 255, 0.82);
+}
+
+.auth-panel-top-link {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: #64748b;
+}
+
+.auth-panel-top-link .auth-link {
+  margin: 0;
+  color: #2f5bff;
+  font-weight: 700;
+}
+
+.auth-panel-light {
+  position: relative;
 }
 
 .auth-link {
@@ -224,13 +262,20 @@
     padding: 32px 24px;
   }
 
+  .auth-panel-dark {
+    padding: 0;
+  }
+
   .auth-panel-light {
     border-radius: 0 0 30px 30px;
   }
 
+  .auth-panel-light {
+    overflow-y: visible;
+  }
+
   .preview-box {
-    max-width: 100%;
-    min-height: 300px;
+    height: 360px;
   }
 }
 
@@ -239,7 +284,11 @@
 
 
 
-/* avatar */
+/* =========================
+   Legacy / duplicate auth styles
+   (kept commented for reference)
+========================= */
+/*
 .profile-avatar {
   display: flex;
   justify-content: center;
@@ -281,7 +330,7 @@
   color: #6b7280;
   max-width: 220px;
 }
-/* beginner-friendly auth page styling */
+
 .auth-page {
   min-height: 100vh;
   display: grid;
@@ -355,3 +404,4 @@
     padding: 28px 24px;
   }
 }
+*/

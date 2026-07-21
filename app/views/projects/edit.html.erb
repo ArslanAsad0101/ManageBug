@@ -60,15 +60,17 @@
 
           <aside class="project-form-sidebar">
             <div class="upload-card">
-              <% if @project.image.attached? %>
-                <%= image_tag @project.image, alt: @project.name, class: "upload-preview" %>
-              <% else %>
-                <label for="project_image" class="upload-placeholder">
-                  <div class="upload-icon">+</div>
-                  <p class="upload-title">Upload logo</p>
-                  <p class="upload-hint">PNG, JPG</p>
-                </label>
-              <% end %>
+              <label for="project_image" class="upload-target">
+                <% if @project.image.attached? %>
+                  <%= image_tag @project.image, alt: @project.name, class: "upload-preview" %>
+                <% else %>
+                  <div class="upload-placeholder">
+                    <div class="upload-icon">+</div>
+                    <p class="upload-title">Upload logo</p>
+                    <p class="upload-hint">PNG, JPG</p>
+                  </div>
+                <% end %>
+              </label>
               <%= form.file_field :image, id: "project_image", accept: "image/png,image/jpeg,image/svg+xml", class: "upload-input" %>
             </div>
           </aside>

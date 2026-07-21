@@ -89,7 +89,20 @@
 
         <div class="form-row">
           <%= form.label :screenshot, class: "field-label" %>
-          <%= form.file_field :screenshot, class: "input-field", accept: "image/*" %>
+          <div class="upload-card">
+            <label for="bug_screenshot" class="upload-target">
+              <% if @bug.screenshot.attached? %>
+                <%= image_tag @bug.screenshot, alt: @bug.title, class: "upload-preview" %>
+              <% else %>
+                <div class="upload-placeholder">
+                  <div class="upload-icon">+</div>
+                  <p class="upload-title">Upload screenshot</p>
+                  <p class="upload-hint">PNG, JPG</p>
+                </div>
+              <% end %>
+            </label>
+            <%= form.file_field :screenshot, id: "bug_screenshot", class: "upload-input", accept: "image/*" %>
+          </div>
         </div>
       <% end %>
 

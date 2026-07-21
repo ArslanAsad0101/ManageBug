@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_form_data, only: [:new, :create, :edit, :update]
+  before_action :load_data, only: [:new, :create, :edit, :update]
   before_action :set_project, only: [:show, :edit, :update, :destroy]
   # load_and_authorize_resource
 
@@ -16,8 +16,7 @@ end
 
 def new
   authorize! :create, Project
-  # @qas = User.qa
-  # @developers = User.developer
+  @project = Project.new
 end
 
   def create
@@ -32,14 +31,14 @@ end
 
     redirect_to projects_path, notice: "Project created successfully."
   else
-    render :new
+    render :new, status: :unprocessable_entity, alert: "Please fix the errors below."
   end
 end
 
 
 
 def show
-  @project = Project.find(params[:id])
+  # @project = Project.find(params[:id])
 end
 
 
@@ -50,7 +49,7 @@ def edit
   # @developers = User.developer
 end
 def update
-  user_ids = (params[:project][:qa_user_ids] || []) + (params[:project][:developer_user_ids] || [])
+  user_ids = (params[:project][:qa_user_ids]) + (params[:project][:developer_user_ids])
 
   if @project.update(project_params)
     @project.project_users.destroy_all
@@ -79,7 +78,7 @@ end
   params.require(:project).permit(:name, :description, :image)
 end
 
-def load_form_data
+def load_data
   @qas = User.qa
   @developers = User.developer 
 end

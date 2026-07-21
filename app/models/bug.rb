@@ -18,27 +18,16 @@ class Bug < ApplicationRecord
   validates :title, presence: true
   validates :bug_type, presence: true
   validates :status, presence: true
+  validates :title, uniqueness: {scope: :project_id}
 
-  validates :title,
-            uniqueness: {
-              scope: :project_id
-            }
+ 
+   # Helper method to get the correct status label based on bug_type
+ def status_label
+  return status.titleize unless completed?
+  bug? ? "Resolved" : "Completed"
+end
 
-  # Helper method to get the correct status label based on bug_type
-  def status_label
-    case status
-    when "pending"
-      "Pending"
-    when "started"
-      "Started"
-    when "completed"
-      bug? ? "Resolved" : "Completed"
-    else
-      status.titleize
-    end
-  end
-
-  # For forms - get status options based on bug_type
+ # For forms - get status options based on bug_type
   def self.status_options_for_type(bug_type)
     options = {
       "Pending" => "pending",
@@ -53,4 +42,13 @@ class Bug < ApplicationRecord
     
     options
   end
+
+
+ private
+
+  def set_default_status
+    self.status ||= "pending"
+  end
+
+ 
 end

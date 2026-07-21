@@ -29,83 +29,46 @@
   </div>
 
         <div class="view-toggle" style="display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-bottom:12px;">
-          <button id="list-view-btn" class="button" title="List view" aria-pressed="true">☰</button>
-          <button id="grid-view-btn" class="button" title="Grid view" aria-pressed="false">▦</button>
+          <%= link_to "☰", bugs_path(search: params[:search], view: 'list'), 
+              class: "button #{@view == 'list' ? 'active' : ''}", 
+              title: "List view", 
+              aria_pressed: @view == 'list' %>
+          <%= link_to "▦", bugs_path(search: params[:search], view: 'grid'), 
+              class: "button #{@view == 'grid' ? 'active' : ''}", 
+              title: "Grid view", 
+              aria_pressed: @view == 'grid' %>
         </div>
 
 
-  <div id="bugs-table-view" class="table-card">
-    <table class="table-list">
-      <thead>
-        <tr>
-          <th>Bug details</th>
-          <th>Status</th>
-          <th>Due date</th>
-          <th>Assigned to</th>
-          <th>Project</th>
-          
-        </tr>
-      </thead>
-      <tbody>
-        <% @bugs.each do |bug| %>
-    <tr onclick="window.location='<%= project_bug_path(bug.project, bug) %>';" style="cursor: pointer;">
-            <td><%= bug.title %></td>
-            <td><span class="status-badge status-<%= bug.status %>"><%= bug.status_label %></span></td>
-            <td><%= bug.deadline.present? ? bug.deadline.strftime("%b %d, %Y") : "—" %></td>
-            <td><%= bug.developer.name %></td>
-            <td><%= bug.project.name %></td>
-
+  <% if @view == 'list' %>
+    <div class="table-card">
+      <table class="table-list">
+        <thead>
+          <tr>
+            <th>Bug details</th>
+            <th>Status</th>
+            <th>Due date</th>
+            <th>Assigned to</th>
+            <th>Project</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-  <div id="bugs-grid-view" style="display:none;margin-top:16px;">
-    <%= render partial: 'grid', locals: { bugs: @bugs } %>
-  </div>
+        </thead>
+        <tbody>
+          <% @bugs.each do |bug| %>
+            <tr onclick="window.location='<%= project_bug_path(bug.project, bug) %>';" style="cursor: pointer;">
+              <td><%= bug.title %></td>
+              <td><span class="status-badge status-<%= bug.status %>"><%= bug.status_label %></span></td>
+              <td><%= bug.deadline.present? ? bug.deadline.strftime("%b %d, %Y") : "—" %></td>
+              <td><%= bug.developer.name %></td>
+              <td><%= bug.project.name %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div style="margin-top:16px;">
+      <%= render partial: 'grid', locals: { bugs: @bugs } %>
+    </div>
+  <% end %>
 
-  <script>
-    (function(){
-      var searchInput = document.getElementById('bug-search');
-      var listBtn = document.getElementById('list-view-btn');
-      var gridBtn = document.getElementById('grid-view-btn');
-      var tableView = document.getElementById('bugs-table-view');
-      var gridView = document.getElementById('bugs-grid-view');
-
-      function setView(view){
-        if(view==='grid'){
-          tableView.style.display='none';
-          gridView.style.display='block';
-          listBtn.setAttribute('aria-pressed', 'false');
-          gridBtn.setAttribute('aria-pressed', 'true');
-        } else {
-          tableView.style.display='block';
-          gridView.style.display='none';
-          listBtn.setAttribute('aria-pressed', 'true');
-          gridBtn.setAttribute('aria-pressed', 'false');
-        }
-      }
-
-      listBtn.addEventListener('click', function(){ setView('list'); });
-      gridBtn.addEventListener('click', function(){ setView('grid'); });
-
-      function textForBugRow(row){ return row.textContent || row.innerText || '' }
-      function textForBugCard(card){ return card.textContent || card.innerText || '' }
-
-      function filter(term){
-        var trs = document.querySelectorAll('#bugs-table-view tbody tr');
-        trs.forEach(function(tr){
-          var visible = textForBugRow(tr).toLowerCase().indexOf(term) !== -1;
-          tr.style.display = visible ? '' : 'none';
-        });
-        var cards = document.querySelectorAll('#bugs-grid-view .bug-card');
-        cards.forEach(function(card){
-          var visible = textForBugCard(card).toLowerCase().indexOf(term) !== -1;
-          card.style.display = visible ? '' : 'none';
-        });
-      }
-
-      searchInput.addEventListener('input', function(e){ filter(e.target.value.trim().toLowerCase()); });
-    })();
-  </script>
 </div>

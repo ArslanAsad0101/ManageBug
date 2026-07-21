@@ -13,11 +13,16 @@ class BugsController < ApplicationController
     end
   end
 
-  def new
-    authorize! :create, Bug
-    @bug = Bug.new(bug_form_params)
-    @step = params[:step] == "select_developer" ? "select_developer" : "details"
+ def new
+  authorize! :create, Bug
+  @bug = Bug.new(bug_form_params)
+
+  if params[:bug].blank? && params[:project_id].present? && @projects.exists?(params[:project_id])
+    @bug.project_id = params[:project_id]
   end
+
+  @step = params[:step] == "select_developer" ? "select_developer" : "details"
+end
 
 
   def create

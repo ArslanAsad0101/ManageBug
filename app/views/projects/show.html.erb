@@ -63,8 +63,7 @@
       </div>
 
       <% if can? :create, Bug %>
-        <%= link_to "New Bug", new_bug_path, class: "button button-primary" %>
-      <% end %>
+<%= link_to "Report Bug", new_bug_path(project_id: @project.id), class: "button button-primary" %>      <% end %>
     </div>
 
     <% if @project.bugs.any? %>

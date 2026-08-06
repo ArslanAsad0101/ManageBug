@@ -6,7 +6,7 @@ class BugsController < ApplicationController
 
   def index
     @bugs = Bug.accessible_by(current_ability)
-    @view = params[:view] || "list"
+    @view = params[:view]
 
     if params[:search].present?
       @bugs = @bugs.where("title LIKE ?", "%#{params[:search]}%")
@@ -17,11 +17,18 @@ class BugsController < ApplicationController
   authorize! :create, Bug
   @bug = Bug.new(bug_form_params)
 
+# prepopullate the project
   if params[:bug].blank? && params[:project_id].present? && @projects.exists?(params[:project_id])
     @bug.project_id = params[:project_id]
   end
 
-  @step = params[:step] == "select_developer" ? "select_developer" : "details"
+  if params[:step] == "select_developer"
+    validate_step_one_details!
+    return if @bug.errors.any?
+    @step = "select_developer"
+  else
+    @step = "details"
+  end
 end
 
 
@@ -30,12 +37,12 @@ end
 
     @project = current_user.assigned_projects.find_by(id: bug_params[:project_id])
 
-    unless @project
-      @bug = Bug.new(bug_form_params)
-      @bug.errors.add(:project_id, "must be selected")
-      render :new, status: :unprocessable_entity
-      return
-    end
+    # unless @project
+    #   @bug = Bug.new(bug_form_params)
+    #   @bug.errors.add(:project_id, "must be selected")
+    #   render :new, status: :unprocessable_entity
+    #   return
+    # end
 
     @bug = @project.bugs.build(bug_form_params)
     @bug.reporter = current_user
@@ -43,6 +50,8 @@ end
     if @bug.save
       redirect_to [@project, @bug], notice: "Bug was successfully created."
     else
+      # @bug.errors.add(:developer_id, "can't be blank") if @bug.developer_id.blank?
+      @step = "select_developer"
       render :new, status: :unprocessable_entity
     end
   end
@@ -85,12 +94,10 @@ end
   def load_data
     @projects = current_user.assigned_projects
 
-    selected_project_id = params.dig(:bug, :project_id) || params[:project_id]
+    selected_project_id = params.dig(:bug, :project_id) || params[:project_id] 
 
     @developers = if selected_project_id.present?
-                   Project.find_by(id: selected_project_id)&.assigned_users&.developer
-                 else
-                   []
+                   Project.find_by(id: selected_project_id).assigned_users&.developer
                  end
   end
 
@@ -106,6 +113,13 @@ end
     return {} unless params[:bug].present?
 
     params.require(:bug).permit(:project_id, :title, :description, :deadline, :bug_type, :status, :developer_id, :screenshot)
+  end
+
+  def validate_step_one_details!
+    @bug.errors.add(:project_id, "must be selected") if @bug.project_id.blank?
+    @bug.errors.add(:title, "can't be blank") if @bug.title.blank?
+    @bug.errors.add(:deadline, "can't be blank") if @bug.deadline.blank?
+    @bug.errors.add(:bug_type, "can't be blank") if @bug.bug_type.blank?
   end
 
   def bug_params

@@ -7,7 +7,7 @@
     </div>
 
     <div class="header-right">
-      <%= form_with url: projects_path, method: :get, local: true, class: "search-bar" do |form| %>
+      <%= form_with url: projects_path, method: :get, class: "search-bar" do |form| %>
         <%= form.search_field :search,
             value: params[:search],
             placeholder: "Search for Projects here",

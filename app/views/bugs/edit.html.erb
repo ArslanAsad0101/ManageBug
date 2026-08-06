@@ -9,7 +9,6 @@
   <div class="form-card">
     <%= form_with model: @bug,
         url: project_bug_path(@project, @bug),
-        local: true,
         html: { id: "edit-bug-form", multipart: true } do |form| %>
 
       <% if @is_developer %>

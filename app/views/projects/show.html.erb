@@ -59,7 +59,6 @@
     <div class="page-header">
       <div>
         <p class="page-label">Project Bugs</p>
-        <h2 class="page-title"><%= pluralize(@project.bugs.count, "Bug") %></h2>
       </div>
 
       <% if can? :create, Bug %>

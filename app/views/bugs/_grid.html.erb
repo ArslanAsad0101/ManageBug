@@ -1,15 +1,13 @@
 <div class="bugs-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;">
   <% bugs.each do |bug| %>
-    <div class="bug-card" style="border:1px solid #eee;padding:12px;border-radius:6px;cursor:pointer;" onclick="window.location='<%= project_bug_path(bug.project, bug) %>'">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+<%= link_to project_bug_path(bug.project, bug), class: "bug-card", style: "display:block;border:1px solid #eee;padding:12px;border-radius:6px;cursor:pointer;text-decoration:none;color:inherit;" do %>      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
         <strong style="font-size:14px"><%= truncate(bug.title, length: 60) %></strong>
         <span class="status-badge status-<%= bug.status %>" style="font-size:12px;padding:4px 8px;border-radius:12px"><%= bug.status_label %></span>
       </div>
       <div style="color:#666;font-size:13px;margin-bottom:8px;">
         <div><strong>Project:</strong> <%= bug.project.name %></div>
-        <div><strong>Assigned:</strong> <%= bug.developer&.name || '—' %></div>
+        <div><strong>Assigned:</strong> <%= bug.developer&.name %></div>
       </div>
-     
-    </div>
+     <% end %>
   <% end %>
 </div>

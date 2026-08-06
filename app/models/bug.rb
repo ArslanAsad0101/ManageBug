@@ -15,13 +15,15 @@ class Bug < ApplicationRecord
     completed: 2
   }
 
-  validates :title, presence: true
-  validates :bug_type, presence: true
+  # validates :bug_type, presence: true
   validates :status, presence: true
-  validates :title, uniqueness: {scope: :project_id}
+  # validates :title, uniqueness: {scope: :project_id}
+  # validates :deadline, presence: true
+  # validate :acceptable_screenshot
+  validates :developer_id, presence: true
 
  
-   # Helper method to get the correct status label based on bug_type
+  #  Helper method to get the correct status label based on bug_type
  def status_label
   return status.titleize unless completed?
   bug? ? "Resolved" : "Completed"
@@ -34,7 +36,7 @@ end
       "Started" => "started"
     }
     
-    if bug_type == "feature" || bug_type == 0
+    if bug_type == 0
       options["Completed"] = "completed"
     else
       options["Resolved"] = "completed"
@@ -50,5 +52,13 @@ end
     self.status ||= "pending"
   end
 
+
+  def acceptable_screenshot
+  return unless screenshot.attached?
+
+  unless screenshot.content_type.in?(%w[image/png image/jpeg])
+    errors.add(:screenshot, "must be a PNG or JPEG image")
+  end
+end
  
 end

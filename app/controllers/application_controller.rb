@@ -17,13 +17,13 @@ private
   def handle_access_denied(exception)
     @error_message = "You don't have permission to access this resource."
     @error_code = "Unauthorized Access"
-    render :error, status: :forbidden, layout: "application"
+    render :error, status: :forbidden, layout: "error"
   end
 
   def handle_not_found(exception)
     @error_message = "The resource you're looking for couldn't be found."
     @error_code = "Not Found"
-    render :error, status: :not_found, layout: "application"
+    render :error, status: :not_found, layout: "error"
   end
 
 def configure_permitted_parameters

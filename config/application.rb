@@ -12,6 +12,10 @@ module ManageBug
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.1
 
+    # This app uses Propshaft + Importmap, not Sprockets. react-rails should not
+    # attach JSX to a non-existent Sprockets environment.
+    config.react.sprockets_strategy = false
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.

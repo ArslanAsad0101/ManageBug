@@ -18,13 +18,14 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
 
     <%# Load auth-only styles on role selection, login, and signup pages %>
     <% if controller_path == 'home' || controller_path == 'devise/sessions' || controller_path == 'devise/registrations' %>
       <%= stylesheet_link_tag "authentication", "data-turbo-track": "reload" %>
     <% end %>
     <%= javascript_importmap_tags %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
   <body class="<%= content_for?(:body_class) ? yield(:body_class) : '' %>">

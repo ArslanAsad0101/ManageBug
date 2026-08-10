@@ -1,91 +1,104 @@
 class BugsController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_data, only: [:new, :create, :edit, :update]
-  before_action :set_project, except: [:index, :new, :create]
-  before_action :set_bug, only: [:show, :edit, :update, :destroy]
+  before_action :load_data, only: %i[new create edit update]
+  before_action :set_project, except: %i[index new create]
+  before_action :set_bug, only: %i[show edit update destroy]
 
   def index
     @bugs = Bug.accessible_by(current_ability)
-    @view = params[:view]
+    @bugs = @bugs.where("title LIKE ?", "%#{params[:search]}%") if params[:search].present?
 
-    if params[:search].present?
-      @bugs = @bugs.where("title LIKE ?", "%#{params[:search]}%")
+    respond_to do |format|
+      format.html
+      format.json { render json: @bugs.map { |bug| bug_json(bug) } }
     end
   end
 
- def new
-  authorize! :create, Bug
-  @bug = Bug.new(bug_form_params)
+  def new
+    authorize! :create, Bug
+    @bug = Bug.new
 
-# prepopullate the project
-  if params[:bug].blank? && params[:project_id].present? && @projects.exists?(params[:project_id])
-    @bug.project_id = params[:project_id]
+    respond_to do |format|
+      format.html
+      format.json do
+        render json: {
+          projects: @projects.map { |project| { id: project.id, name: project.name } },
+          developers: users_json(@developers || [])
+        }
+      end
+    end
   end
-
-  if params[:step] == "select_developer"
-    validate_step_one_details!
-    return if @bug.errors.any?
-    @step = "select_developer"
-  else
-    @step = "details"
-  end
-end
-
 
   def create
     authorize! :create, Bug
-
     @project = current_user.assigned_projects.find_by(id: bug_params[:project_id])
 
     # unless @project
-    #   @bug = Bug.new(bug_form_params)
+    #   @bug = Bug.new(bug_params)
     #   @bug.errors.add(:project_id, "must be selected")
-    #   render :new, status: :unprocessable_entity
-    #   return
+    #   return render_validation_error(:new)
     # end
 
-    @bug = @project.bugs.build(bug_form_params)
+    @bug = @project.bugs.build(bug_params)
     @bug.reporter = current_user
 
     if @bug.save
-      redirect_to [@project, @bug], notice: "Bug was successfully created."
+      respond_to do |format|
+        format.html { redirect_to [@project, @bug], notice: "Bug was successfully created." }
+        format.json { render json: bug_json(@bug), status: :created }
+      end
     else
-      # @bug.errors.add(:developer_id, "can't be blank") if @bug.developer_id.blank?
-      @step = "select_developer"
-      render :new, status: :unprocessable_entity
+      render_validation_error(:new)
     end
   end
 
   def show
     authorize! :read, @bug
+    @bug_json = bug_json(@bug, with_permissions: true)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @bug_json }
+    end
   end
 
   def edit
     authorize! :update, @bug
-
-    # @developers = User.developer
     @is_developer = current_user.developer?
+
+    respond_to do |format|
+      format.html
+      format.json do
+        render json: {
+          bug: bug_json(@bug),
+          developers: users_json(@developers || []),
+          is_developer: @is_developer
+        }
+      end
+    end
   end
 
   def update
     authorize! :update, @bug
+    @is_developer = current_user.developer?
 
     if @bug.update(bug_params)
-      redirect_to [@project, @bug], notice: "Bug updated successfully."
+      respond_to do |format|
+        format.html { redirect_to [@project, @bug], notice: "Bug updated successfully." }
+        format.json { render json: bug_json(@bug) }
+      end
     else
-      # @developers = User.developer
-      @is_developer = current_user.developer?
-      render :edit, status: :unprocessable_entity
+      render_validation_error(:edit)
     end
   end
 
   def destroy
     authorize! :destroy, @bug
+    @bug.destroy
 
-    if @bug.destroy
-      redirect_to project_path(@project), notice: "Bug deleted successfully."
-    else
-      redirect_to project_bug_path(@project, @bug), alert: "Unable to delete this bug."
+    respond_to do |format|
+      format.html { redirect_to project_path(@project), notice: "Bug deleted successfully." }
+      format.json { head :no_content }
     end
   end
 
@@ -93,12 +106,8 @@ end
 
   def load_data
     @projects = current_user.assigned_projects
-
-    selected_project_id = params.dig(:bug, :project_id) || params[:project_id] 
-
-    @developers = if selected_project_id.present?
-                   Project.find_by(id: selected_project_id).assigned_users&.developer
-                 end
+    selected_project_id = params.dig(:bug, :project_id) || params[:project_id]
+    @developers = Project.find_by(id: selected_project_id)&.assigned_users&.developer if selected_project_id.present?
   end
 
   def set_project
@@ -109,33 +118,53 @@ end
     @bug = @project.bugs.find(params[:id])
   end
 
-  def bug_form_params
-    return {} unless params[:bug].present?
-
-    params.require(:bug).permit(:project_id, :title, :description, :deadline, :bug_type, :status, :developer_id, :screenshot)
-  end
-
-  def validate_step_one_details!
-    @bug.errors.add(:project_id, "must be selected") if @bug.project_id.blank?
-    @bug.errors.add(:title, "can't be blank") if @bug.title.blank?
-    @bug.errors.add(:deadline, "can't be blank") if @bug.deadline.blank?
-    @bug.errors.add(:bug_type, "can't be blank") if @bug.bug_type.blank?
-  end
-
   def bug_params
-    if current_user.developer?
-      params.require(:bug).permit(:status)
-    else
-      params.require(:bug).permit(
-        :project_id,
-        :title,
-        :description,
-        :deadline,
-        :bug_type,
-        :status,
-        :developer_id,
-        :screenshot
-      )
+    return params.require(:bug).permit(:status) if current_user.developer?
+
+    params.require(:bug).permit(
+      :project_id,
+      :title,
+      :description,
+      :deadline,
+      :bug_type,
+      :status,
+      :developer_id,
+      :screenshot
+    )
+  end
+
+  def user_json(user)
+    { id: user.id, name: user.name, email: user.email, role: user.role }
+  end
+
+  def users_json(users)
+    users.map { |user| user_json(user) }
+  end
+
+  def bug_json(bug, with_permissions: false)
+    json = {
+      id: bug.id,
+      project_id: bug.project_id,
+      project_name: bug.project.name,
+      title: bug.title,
+      description: bug.description,
+      deadline: bug.deadline,
+      bug_type: bug.bug_type,
+      status: bug.status,
+      status_label: bug.status_label,
+      developer: bug.developer ? user_json(bug.developer) : nil,
+      reporter: user_json(bug.reporter),
+      screenshot_url: bug.screenshot.attached? ? url_for(bug.screenshot) : nil
+    }
+
+    json[:permissions] = { edit: can?(:update, bug), destroy: can?(:destroy, bug) } if with_permissions
+    json
+  end
+
+  def render_validation_error(template)
+    respond_to do |format|
+      format.html { render template, status: :unprocessable_entity }
+      format.json { render json: { errors: @bug.errors.full_messages }, status: :unprocessable_entity }
     end
   end
 end

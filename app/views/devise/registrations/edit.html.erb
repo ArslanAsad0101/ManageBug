@@ -1,73 +1,9 @@
-<div class="page-container profile-settings-page">
-  <div class="page-header">
-    <div>
-      <p class="page-label">Profile Settings</p>
-      <h1 class="page-title">Edit your profile</h1>
-      <p class="page-description">Update your contact details and password.</p>
-    </div>
-  </div>
-
-  <div class="form-card profile-card profile-settings-card">
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, multipart: true }) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
-
-      <div class="profile-avatar">
-        <div class="avatar-card">
-          <label for="user_avatar" class="avatar-picker">
-                <% f.file_field :avatar, id: "user_avatar", accept: "image/png,image/jpeg", class: "avatar-input" %>
-
-            <% if resource.avatar.attached? && resource.avatar.blob.persisted? %>
-              <%= image_tag resource.avatar.variant(resize_to_fill: [140, 140]), alt: "Profile avatar", class: "avatar-image" %>
-            <% else %>
-              <div class="avatar-placeholder">
-                <span>Add photo
-                </span>
-              </div>
-            <% end %>
-          </label>
-        </div>
-        <div class="avatar-meta">
-          <p class="profile-name"><%= resource.name.presence || resource.email %></p>
-          <p class="profile-handle">@<%= resource.email.to_s.split("@").first %></p>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <%= f.label :name, class: "field-label" %>
-        <%= f.text_field :name, autocomplete: "name", class: "input-field" %>
-      </div>
-
-      <div class="form-row">
-        <%= f.label :phone_number, "Mobile number", class: "field-label" %>
-        <%= f.telephone_field :phone_number, autocomplete: "tel", class: "input-field" %>
-      </div>
-
-      <div class="form-row">
-        <%= f.label :email, class: "field-label" %>
-        <%= f.email_field :email, autocomplete: "email", class: "input-field" %>
-      </div>
-
-      <div class="form-row">
-        <%= f.label :password, class: "field-label" %>
-        <span class="field-note">(leave blank if unchanged)</span>
-        <%= f.password_field :password, autocomplete: "new-password", class: "input-field" %>
-      </div>
-
-      <div class="form-row">
-        <%= f.label :password_confirmation, class: "field-label" %>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input-field" %>
-      </div>
-
-      <div class="form-row">
-        <%= f.label :current_password, class: "field-label" %>
-        <span class="field-note">(required to save changes)</span>
-        <%= f.password_field :current_password, autocomplete: "current-password", class: "input-field" %>
-      </div>
-
-      <div class="actions-row">
-        <%= link_to "Cancel", projects_path, class: "button button-secondary" %>
-        <%= f.submit "Confirm", class: "button button-primary" %>
-      </div>
-    <% end %>
-  </div>
-</div>
+<%= react_component("auth/ProfileEdit", {
+  user: {
+    id: resource.id,
+    name: resource.name,
+    email: resource.email,
+    phone_number: resource.phone_number,
+    avatar_url: resource.avatar.attached? ? url_for(resource.avatar.variant(resize_to_fill: [140, 140])) : nil
+  }
+}) %>

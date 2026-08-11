@@ -11,7 +11,7 @@ export default function ProjectCard({ project }) {
                     <img
                         className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
                         src={project.image_url}
-                        alt={project.name}
+                        alt="Error Loading Image"
                     />
                 ) : (
                     <div className="flex h-full items-center justify-center bg-slate-100 text-sm font-semibold uppercase tracking-[0.15em] text-slate-500">
@@ -22,7 +22,6 @@ export default function ProjectCard({ project }) {
 
             <div className="space-y-3 p-6">
                 <h2 className="text-xl font-semibold text-slate-900">{project.name}</h2>
-                <p className="min-h-[3.5rem] text-sm leading-6 text-slate-600">{project.description}</p>
             </div>
         </a>
     );

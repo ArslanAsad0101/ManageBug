@@ -2,7 +2,7 @@
    Authentication screens
 ========================= */
 /* app/assets/stylesheets/auth.css */
-.auth-page {
+/* .auth-page {
   height: 100vh;
   overflow: hidden;
   display: grid;
@@ -78,7 +78,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
-}
+} */
 
 /* preview overlay decorations removed for full-image layout */
 /*
@@ -105,7 +105,7 @@
 }
 */
 
-.auth-footer {
+/* .auth-footer {
   margin-top: 44px;
   font-size: 15px;
   color: rgba(238, 244, 255, 0.82);
@@ -277,7 +277,7 @@
   .preview-box {
     height: 360px;
   }
-}
+} */
 
 
 

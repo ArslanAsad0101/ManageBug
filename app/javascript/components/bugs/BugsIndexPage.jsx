@@ -19,11 +19,8 @@ export default function BugsIndexPage({ initialSearch, canCreate }) {
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
             <div className="mb-10 flex flex-col gap-6 border border-slate-200 border-l-4 border-l-green-500 bg-white p-3 shadow-sm sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <p className="text-sm font-medium uppercase tracking-[0.24em] text-sky-600">Bugs</p>
                     <h1 className="mt-1 text-xl font-semibold text-slate-900 sm:text-4xl">All Bugs</h1>
-                    <p className="mt-1 max-w-lg text-sm leading-6 text-slate-600">
-                        Track and manage bugs across your projects.
-                    </p>
+
                 </div>
 
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">

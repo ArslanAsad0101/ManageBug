@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProjectCard from "./ProjectCard";
 
-export default function ProjectsIndexPage({ initialSearch }) {
+export default function ProjectsIndexPage({ initialSearch, canCreate }) {
     const [projects, setProjects] = useState([]);
     const [search, setSearch] = useState(initialSearch || "");
     const [loading, setLoading] = useState(true);
@@ -33,12 +33,14 @@ export default function ProjectsIndexPage({ initialSearch }) {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
-                    <a
-                        href="/projects/new"
-                        className="inline-flex items-center justify-center bg-sky-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-700"
-                    >
-                        + Add New Project
-                    </a>
+                    {canCreate && (
+                        <a
+                            href="/projects/new"
+                            className="inline-flex items-center justify-center bg-sky-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-700"
+                        >
+                            + Add New Project
+                        </a>
+                    )}
                 </div>
             </div>
 

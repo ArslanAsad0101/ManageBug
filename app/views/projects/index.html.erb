@@ -1,1 +1,1 @@
-<%= react_component("ProjectsIndexPage", { initialSearch: params[:search].to_s }) %>
+<%= react_component("ProjectsIndexPage", { initialSearch: params[:search].to_s, canCreate: can?(:create, Project) }) %>

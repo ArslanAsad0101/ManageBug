@@ -33,35 +33,12 @@
     <p class="alert"><%= alert %></p>
 
     <% if user_signed_in? %>
-      <nav class="topbar">
-        <div class="topbar-left">
-          <div class="topbar-brand">ManageBug</div>
-        </div>
-
-        <div class="topbar-center">
-          <%= link_to "Projects", projects_path, class: "topbar-link" %>
-          <%= link_to "Bug", bugs_path, class: "topbar-link" %>
-        </div>
-
-        <div class="cover-topbar-right">
-          
-
-        <div class="topbar-right">
-          <%= link_to edit_user_registration_path, class: "topbar-link logout-link" do %>
-            <span class="topbar-avatar"><%= current_user.name %></span>
-          <% end %>
-         
-        </div>
-        <div class="topbar-right">
-          
-          <%= link_to "Logout", destroy_user_session_path,
-                method: :delete,
-                data: { turbo_method: :delete },
-                class: "topbar-link logout-link" %>
-        </div>
-        </div>
-      </nav>
-    <% end %>
+  <%= react_component("layout/Navbar", {
+    user: {
+      name: current_user.name
+    }
+  }) %>
+<% end %>
 
     <%= yield %>
   </body>

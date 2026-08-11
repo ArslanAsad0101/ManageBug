@@ -9,7 +9,11 @@ import BugShowPage from "./components/bugs/BugShowPage"
 import ProjectForm from "./components/projects/ProjectForm"
 import ProjectShowPage from "./components/projects/ProjectShowPage"
 import ProjectsIndexPage from "./components/projects/ProjectsIndexPage"
-
+import SignUp from "./components/auth/SignUp"
+import LogIn from "./components/auth/LogIn"
+import RoleSelection from "./components/auth/RoleSelection";
+import Navbar from "./components/layout/Navbar";
+import ProfileEdit from "./components/auth/ProfileEdit";
 const componentMap = {
     BugsIndexPage,
     BugForm,
@@ -17,6 +21,11 @@ const componentMap = {
     ProjectForm,
     ProjectShowPage,
     ProjectsIndexPage,
+    "auth/SignUp": SignUp,
+    "auth/LogIn": LogIn,
+    "auth/RoleSelection": RoleSelection,
+    "layout/Navbar": Navbar,
+    "auth/ProfileEdit": ProfileEdit
 }
 
 const mountReactComponents = () => {
